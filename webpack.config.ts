@@ -1,7 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import path from "path";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import webpack from "webpack";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 
