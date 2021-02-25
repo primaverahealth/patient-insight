@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App, { ClientConfiguration } from './App';
+
+import App from './App';
+import { ClientConfiguration } from './interfaces/ClientConfiguration';
 
 /**
  * @description Init React application
@@ -14,4 +16,4 @@ export const init = (client: ClientConfiguration): void => {
     )
 }
 
-init({ clientId: '064c46de-7783-11eb-9439-0242ac130002', patientId: '003acd9c-7783-11eb-9439-0242ac130002' });
+init({ clientId: '064c46de-7783-11eb-9439-0242ac130002', patientId: 'Corona, Frank David' });
