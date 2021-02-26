@@ -34,7 +34,7 @@ const config: webpack.Configuration = {
     output: {
         path: path.resolve(__dirname, "build"),
         filename: "bundle.js",
-        library: 'MyApp',
+        library: 'PatientInsight',
         libraryTarget: 'umd',
         umdNamedDefine: true,
     },

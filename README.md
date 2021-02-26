@@ -18,7 +18,7 @@
 ### Usage sample
     <script src="./bundle.js" type="text/javascript"></script>
     <script type="text/javascript">
-        MyApp.init({
+        PatientInsight.init({
                 clientId: 'f951b1bc-7782-11eb-9439-0242ac130002',
                 patientId: '003acd9c-7783-11eb-9439-0242ac130002'
             }
