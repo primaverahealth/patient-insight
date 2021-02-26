@@ -14,8 +14,5 @@ const useStyles = makeStyles(() => ({
 export default function Divider(): ReactElement {
     const classes = useStyles();
 
-    return (
-        <div className={classes.divider}>
-        </div>
-    );
+    return (<div className={classes.divider}/>);
 }
