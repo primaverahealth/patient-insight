@@ -3,16 +3,18 @@
   "version": "0.0.1",
   "scripts": {
     "start": "node server.js",
-    "start:dev": "webpack serve --open --mode=development",
+    "start:dev": "webpack serve --mode=development",
     "build": "webpack --mode production",
     "lint": "eslint",
     "postinstall": "npm run build"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
+    "@material-ui/data-grid": "^4.0.0-alpha.20",
     "express": "^4.17.1",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-number-format": "^4.4.4"
   },
   "license": "MIT",
   "private": false,

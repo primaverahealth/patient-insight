@@ -34,7 +34,7 @@ export default function DoubleValues(props: DoubleValuesProps): ReactElement {
     return (
         <div className={classes.container}>
             {data.map((item: IDoubleValues) => (
-                <div className={classes.valueContainer} key={item.value}>
+                <div className={classes.valueContainer} key={item.description}>
                     <div className={classes.value}>{item.value}</div>
                     <Typography variant={'caption'}>{item.description}</Typography>
                 </div>
