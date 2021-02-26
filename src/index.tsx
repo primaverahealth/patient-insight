@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import App from './App';
-import { ClientConfiguration } from './interfaces/ClientConfiguration';
+import { ClientConfiguration } from './interfaces';
 
 /**
  * @description Init React application

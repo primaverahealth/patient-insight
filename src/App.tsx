@@ -5,7 +5,7 @@ import Summary from './components/Summary/Summary';
 import HCCs from './components/HCCs/HCCs';
 
 import { width_100 } from './utils/WidthUtils';
-import { ClientConfiguration } from './interfaces/ClientConfiguration';
+import { ClientConfiguration } from './interfaces';
 import SectionFinancial from './components/SectionFinancial/SectionFinancial';
 import MemberTrendTracker from './components/MemberTrendTracker/MemberTrendTracker';
 
