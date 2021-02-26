@@ -15,16 +15,24 @@ const useStyles = makeStyles(() => ({
     value: {
         fontWeight: 300,
         fontSize: '34px'
+    },
+    negativeValue: {
+        fontWeight: 300,
+        fontSize: '34px',
+        color: '#f4511e',
     }
 }))
 
 export default function SingleValue(props: SingleValueProps): ReactElement {
     const styles = useStyles();
     const { data } = props;
+    const isNegative = (value: number) => {
+        return (value > 100) ? styles.negativeValue : styles.value;
+    }
 
     return (
         <div className={styles.container}>
-            <div className={styles.value}>{data.value}%</div>
+            <div className={isNegative(data.value)}>{data.value}%</div>
         </div>
     )
 }
