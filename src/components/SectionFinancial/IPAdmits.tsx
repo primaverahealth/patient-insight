@@ -1,29 +1,26 @@
 import React, { ReactElement } from 'react';
 import { Paper } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
 
 import { commonStyles } from '../../utils/CommonStyles';
 import DoubleValues from '../../common/DoubleValues/DoubleValues';
-import { DoubleValuesProps } from '../../interfaces';
+import { DoubleValuesProps, FinancialFooterProps } from '../../interfaces';
+import FinancialFooter from '../../common/FinancialFooter/FinancialFooter';
 
 
 export default function IPAdmits(): ReactElement {
     const common = commonStyles();
-    const info: DoubleValuesProps = {
+    const doubleValuesProps: DoubleValuesProps = {
         data: [
             { value: 1, description: 'Claims' },
             { value: 1, description: 'ENS' }
         ]
     }
+    const footerProps: FinancialFooterProps = { data: { name: 'IP Admits' } };
 
     return (
         <Paper elevation={1} className={common.box}>
-            <DoubleValues data={info.data}/>
-            <div className={common.footer}>
-                <Typography variant='subtitle1' gutterBottom align="center">
-                    IP Admits
-                </Typography>
-            </div>
+            <DoubleValues data={doubleValuesProps.data}/>
+            <FinancialFooter data={footerProps.data}/>
         </Paper>
     );
 }
