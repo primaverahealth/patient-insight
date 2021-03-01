@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
-import { fetchPivot, fetchPivotProps } from './getFinancialSummary';
+import { fetchMemberFinancial, fetchPivot, fetchPivotProps } from './getFinancialSummary';
+import { FinancialMemberResponse } from '../interfaces';
 
 
 export interface StateContextType {
@@ -9,7 +10,9 @@ export interface StateContextType {
 
     getToken(name: string, room: string, passcode?: string): Promise<string>;
 
-    fetchPivot(params: fetchPivotProps, clientId: string): Promise<Response>
+    fetchPivot(params: fetchPivotProps, clientId: string): Promise<Response>;
+
+    fetchMemberFinancial(params: fetchPivotProps, clientId: string): Promise<FinancialMemberResponse>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -23,6 +26,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
         error,
         setError,
         fetchPivot,
+        fetchMemberFinancial,
     } as StateContextType;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -39,7 +43,27 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
             });
     };
 
-    return <StateContext.Provider value={{ ...contextValue, fetchPivot }}>{props.children}</StateContext.Provider>;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const financialMember: StateContextType['fetchMemberFinancial'] = (params, clientId) => {
+        return contextValue
+            .fetchMemberFinancial(params, clientId)
+            .then(res => {
+                return res;
+            })
+            .then(data => data)
+            .catch(err => {
+                setError(err);
+                return Promise.reject(err);
+            });
+    };
+
+    return <StateContext.Provider
+        value={{
+            ...contextValue,
+            fetchPivot,
+            fetchMemberFinancial
+        }}>{props.children}
+    </StateContext.Provider>;
 }
 
 export function useAppState(): StateContextType {
