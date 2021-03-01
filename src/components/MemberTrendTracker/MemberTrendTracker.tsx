@@ -1,6 +1,17 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import {
+    Avatar,
+    Chip,
+    makeStyles,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
+} from '@material-ui/core';
 
 import Divider from '../../common/Divider/Divider';
 import { width_100 } from '../../utils/WidthUtils';
@@ -15,6 +26,10 @@ const useStyles = makeStyles(() => ({
     table: {
         width: width_100,
     },
+    headerContainer: {
+        display: 'flex',
+        justifyContent: 'space-between'
+    }
 }))
 
 export default function MemberTrendTracker(): ReactElement {
@@ -26,11 +41,33 @@ export default function MemberTrendTracker(): ReactElement {
         createData('active', 'active', 'inactive', 'active', 'inactive', 'active', 'active'),
     ];
 
+    // Handling React Hooks
+    const [filterAvatar, setFilterAvatar] = useState('R');
+    const [isRevenue, setIsRevenue] = useState(true);
+    const handleFilter = () => {
+        setIsRevenue((prevState => !prevState));
+    }
+    useEffect(() => {
+        // update the avatar
+        setFilterAvatar(() => isRevenue ? 'R' : 'E');
+        // make the API call
+        // ...
+    }, [isRevenue])
+
     return (
         <Paper elevation={1} className={classes.box}>
-            <Typography variant='h5' component='h1' gutterBottom align="left">
-                Member Tracker / Trend Graphic
-            </Typography>
+            <div className={classes.headerContainer}>
+                <Typography variant='h5' component='h1' gutterBottom align="left">
+                    Member Tracker / Trend Graphic
+                </Typography>
+                <Chip
+                    avatar={<Avatar>{filterAvatar}</Avatar>}
+                    label={isRevenue ? 'Revenue' : 'Eligibility'}
+                    clickable
+                    onClick={handleFilter}
+                    color={isRevenue ? 'primary' : 'secondary'}
+                />
+            </div>
             <Divider/>
             <TableContainer>
                 <Table className={classes.table} size="medium" aria-label="a dense table">
