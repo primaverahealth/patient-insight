@@ -28,6 +28,14 @@ const useStyles = makeStyles(() => ({
     },
     table: {
         width: width_100,
+    },
+    action: {
+        cursor: 'pointer',
+        transition: '.3s ease-in-out',
+        color: '#1b55c6',
+        '&:hover': {
+            textDecoration: 'underline',
+        },
     }
 }))
 
@@ -39,7 +47,7 @@ const useStyles = makeStyles(() => ({
 export default function Summary(props: { summary: FinancialMemberResponse }): ReactElement {
     const classes = useStyles();
     // prepare to use AppState
-    const { isFetching } = useAppState();
+    const { isFetchingFinancial } = useAppState();
     // hook for default state of the query params to use
     const [dataSource, setDataSource] = useState([]);
 
@@ -83,8 +91,8 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
             <Typography variant='h5' component='h1' gutterBottom align="left">
                 Summary
             </Typography>
-            {isFetching && <LinearProgress/>}
-            {!isFetching &&
+            {isFetchingFinancial && <LinearProgress/>}
+            {!isFetchingFinancial &&
             <>
                 <Divider/>
                 <TableContainer>
@@ -108,6 +116,7 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
                                                       displayType={'text'}
                                                       thousandSeparator={true}
                                                       decimalScale={2}
+                                                      className={classes.action}
                                                       prefix={'$'}/>
                                     </TableCell>
                                     <TableCell align="right">
@@ -115,6 +124,7 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
                                                       displayType={'text'}
                                                       thousandSeparator={true}
                                                       decimalScale={2}
+                                                      className={classes.action}
                                                       prefix={'$'}/>
                                     </TableCell>
                                     <TableCell align="right">
@@ -122,6 +132,7 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
                                                       displayType={'text'}
                                                       thousandSeparator={true}
                                                       decimalScale={2}
+                                                      className={classes.action}
                                                       prefix={'$'}/>
                                     </TableCell>
                                     <TableCell align="right">
@@ -129,6 +140,7 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
                                                       displayType={'text'}
                                                       thousandSeparator={true}
                                                       decimalScale={2}
+                                                      className={classes.action}
                                                       prefix={'$'}/>
                                     </TableCell>
                                     <TableCell align="right">
@@ -136,6 +148,7 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
                                                       displayType={'text'}
                                                       thousandSeparator={true}
                                                       decimalScale={2}
+                                                      className={classes.action}
                                                       prefix={'$'}/>
                                     </TableCell>
                                     <TableCell align="right">
@@ -143,6 +156,7 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
                                                       displayType={'text'}
                                                       thousandSeparator={true}
                                                       decimalScale={2}
+                                                      className={classes.action}
                                                       prefix={'$'}/>
                                     </TableCell>
                                     <TableCell align="right">
@@ -150,6 +164,7 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
                                                       displayType={'text'}
                                                       thousandSeparator={true}
                                                       decimalScale={2}
+                                                      className={classes.action}
                                                       prefix={'$'}/>
                                     </TableCell>
                                 </TableRow>
