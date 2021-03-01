@@ -5,25 +5,33 @@ import { fetchPivotProps, FinancialMemberResponse } from '../interfaces';
 
 export interface StateContextType {
     error: Error | null;
-    isFetching: boolean,
+    isFetchingFinancial: boolean,
+    isFetchingHospPivot: boolean,
+    isFetchingPivot: boolean,
 
     setError(error: Error | null): void;
 
     fetchPivot(params: fetchPivotProps, clientId: string): Promise<Response>;
 
     fetchMemberFinancial(params: fetchPivotProps, clientId: string): Promise<FinancialMemberResponse>;
+
+    fetchHospitalizationPivot(patientId: string, clientId: string): Promise<Response>;
 }
 
 export const StateContext = createContext<StateContextType>(null!);
 
 export default function AppStateProvider(props: React.PropsWithChildren<{}>): JSX.Element {
     const [error, setError] = useState<Error | null>(null);
-    const [isFetching, setIsFetching] = useState(false);
+    const [isFetchingFinancial, setIsFetchingFinancial] = useState(false);
+    const [isFetchingHospPivot, setIsFetchingHospPivot] = useState(false);
+    const [isFetchingPivot, setIsFetchingPivot] = useState(false);
 
     let contextValue = {
         error,
         setError,
-        isFetching,
+        isFetchingFinancial,
+        isFetchingHospPivot,
+        isFetchingPivot
     } as StateContextType;
 
     contextValue = {
@@ -50,37 +58,63 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                 },
                 body: JSON.stringify({ ...params }),
             }).then(response => response.json());
+        },
+        fetchHospitalizationPivot: async (patientId: string, clientId: string) => {
+            return fetch(`https://api.primaverahealthcare.com/hospitalization/pivot`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'x-tenant': clientId
+                },
+                body: JSON.stringify({ patientId, groupBy: 'byType' }),
+            }).then(response => response.json());
         }
     }
 
     const fetchPivot: StateContextType['fetchPivot'] = (params: fetchPivotProps, clientId: string) => {
-        setIsFetching(true);
+        setIsFetchingPivot(true);
         return contextValue
             .fetchPivot(params, clientId)
             .then(res => {
-                setIsFetching(false);
-                return res.json();
-            })
-            .then(data => data.json())
-            .catch(err => {
-                setError(err);
-                setIsFetching(false);
-                return Promise.reject(err);
-            });
-    };
-
-    const fetchMemberFinancial: StateContextType['fetchMemberFinancial'] = (params: fetchPivotProps, clientId: string) => {
-        setIsFetching(true);
-        return contextValue
-            .fetchMemberFinancial(params, clientId)
-            .then(res => {
-                setIsFetching(false);
+                setIsFetchingPivot(false);
                 return res;
             })
             .then(data => data)
             .catch(err => {
                 setError(err);
-                setIsFetching(false);
+                setIsFetchingPivot(false);
+                return Promise.reject(err);
+            });
+    };
+
+    const fetchHospitalizationPivot: StateContextType['fetchHospitalizationPivot'] = (patientId: string, clientId: string) => {
+        setIsFetchingHospPivot(true);
+        return contextValue
+            .fetchHospitalizationPivot(patientId, clientId)
+            .then(res => {
+                setIsFetchingHospPivot(false);
+                return res;
+            })
+            .then(data => data)
+            .catch(err => {
+                setError(err);
+                setIsFetchingHospPivot(false);
+                return Promise.reject(err);
+            });
+    };
+
+    const fetchMemberFinancial: StateContextType['fetchMemberFinancial'] = (params: fetchPivotProps, clientId: string) => {
+        setIsFetchingFinancial(true);
+        return contextValue
+            .fetchMemberFinancial(params, clientId)
+            .then(res => {
+                setIsFetchingFinancial(false);
+                return res;
+            })
+            .then(data => data)
+            .catch(err => {
+                setError(err);
+                setIsFetchingFinancial(false);
                 return Promise.reject(err);
             });
     };
@@ -89,7 +123,8 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
         value={{
             ...contextValue,
             fetchMemberFinancial,
-            fetchPivot
+            fetchPivot,
+            fetchHospitalizationPivot
         }}>{props.children}
     </StateContext.Provider>;
 }
