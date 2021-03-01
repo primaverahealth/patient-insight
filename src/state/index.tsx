@@ -1,58 +1,87 @@
 import React, { createContext, useContext, useState } from 'react';
-import { fetchMemberFinancial, fetchPivot, fetchPivotProps } from './getFinancialSummary';
+
+import { fetchPivotProps } from './getFinancialSummary';
 import { FinancialMemberResponse } from '../interfaces';
 
 
 export interface StateContextType {
     error: Error | null;
+    isFetching: boolean,
 
     setError(error: Error | null): void;
-
-    getToken(name: string, room: string, passcode?: string): Promise<string>;
 
     fetchPivot(params: fetchPivotProps, clientId: string): Promise<Response>;
 
     fetchMemberFinancial(params: fetchPivotProps, clientId: string): Promise<FinancialMemberResponse>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const StateContext = createContext<StateContextType>(null!);
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export default function AppStateProvider(props: React.PropsWithChildren<{}>): JSX.Element {
     const [error, setError] = useState<Error | null>(null);
+    const [isFetching, setIsFetching] = useState(false);
 
-    const contextValue = {
+    let contextValue = {
         error,
         setError,
-        fetchPivot,
-        fetchMemberFinancial,
+        isFetching,
     } as StateContextType;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const getPivot: StateContextType['fetchPivot'] = (params, clientId) => {
+    contextValue = {
+        ...contextValue,
+        fetchMemberFinancial: async (params: fetchPivotProps, clientId: string) => {
+            // Omit specific key from object using vanilla: https://stackoverflow.com/a/60195209/3724184
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { patientId, ...queryParams } = params;
+            return fetch(`https://api.primaverahealthcare.com/financial-member/${params.patientId}`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'x-tenant': clientId
+                },
+                body: JSON.stringify({ ...queryParams }),
+            }).then(response => response.json());
+        },
+        fetchPivot: async (params: fetchPivotProps, clientId: string) => {
+            return fetch(`https://api.primaverahealthcare.com/financial-summary-detail/pivot`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'x-tenant': clientId
+                },
+                body: JSON.stringify({ ...params }),
+            }).then(response => response.json());
+        }
+    }
+
+    const fetchPivot: StateContextType['fetchPivot'] = (params: fetchPivotProps, clientId: string) => {
+        setIsFetching(true);
         return contextValue
             .fetchPivot(params, clientId)
             .then(res => {
+                setIsFetching(false);
                 return res.json();
             })
             .then(data => data.json())
             .catch(err => {
                 setError(err);
+                setIsFetching(false);
                 return Promise.reject(err);
             });
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const financialMember: StateContextType['fetchMemberFinancial'] = (params, clientId) => {
+    const fetchMemberFinancial: StateContextType['fetchMemberFinancial'] = (params: fetchPivotProps, clientId: string) => {
+        setIsFetching(true);
         return contextValue
             .fetchMemberFinancial(params, clientId)
             .then(res => {
+                setIsFetching(false);
                 return res;
             })
             .then(data => data)
             .catch(err => {
                 setError(err);
+                setIsFetching(false);
                 return Promise.reject(err);
             });
     };
@@ -60,8 +89,8 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
     return <StateContext.Provider
         value={{
             ...contextValue,
-            fetchPivot,
-            fetchMemberFinancial
+            fetchMemberFinancial,
+            fetchPivot
         }}>{props.children}
     </StateContext.Provider>;
 }

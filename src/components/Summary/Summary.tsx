@@ -39,10 +39,9 @@ const useStyles = makeStyles(() => ({
 export default function Summary(props: ComponentsProps): ReactElement {
     const classes = useStyles();
     // prepare to use AppState
-    const { fetchMemberFinancial } = useAppState();
+    const { fetchMemberFinancial, isFetching } = useAppState();
     // hook for default state of the query params to use
     const [query] = useState({ ...props.query });
-    const [isFetching, setIsFetching] = useState(false);
     const [dataSource, setDataSource] = useState([]);
 
     /**
@@ -50,10 +49,8 @@ export default function Summary(props: ComponentsProps): ReactElement {
      * @author Frank Corona Prendes <frank.corona@primavera.care>
      */
     const fetchData = () => {
-        setIsFetching(true);
         fetchMemberFinancial(query, props.header)
             .then((response: any) => {
-                setIsFetching(false);
                 // @ts-ignore
                 setDataSource(mappedInformation([response.data]));
             });
