@@ -1,11 +1,23 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import {
+    LinearProgress,
+    makeStyles,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
+} from '@material-ui/core';
 // https://www.npmjs.com/package/react-number-format
 import NumberFormat from 'react-number-format';
 
 import Divider from '../../common/Divider/Divider';
 import { width_100 } from '../../utils/WidthUtils';
+import { useAppState } from '../../state';
+import { ComponentsProps } from '../../interfaces';
 
 const useStyles = makeStyles(() => ({
     box: {
@@ -15,11 +27,42 @@ const useStyles = makeStyles(() => ({
     },
     table: {
         width: width_100,
-    },
+    }
 }))
 
-export default function Summary(): ReactElement {
+/**
+ * @description Function Component for Summary section
+ * @param {ComponentsProps} props
+ * @constructor
+ */
+export default function Summary(props: ComponentsProps): ReactElement {
     const classes = useStyles();
+    // prepare to use AppState
+    const { fetchPivot } = useAppState();
+    // hook for default state of the query params to use
+    const [query] = useState({
+        patientId: props.patientId,
+        from: "2020-04-01",
+        to: "2021-03-01"
+    });
+    const [isFetching, setIsFetching] = useState(false);
+
+    // get data using the AppState
+    const fetchData = () => {
+        setIsFetching(true);
+        fetchPivot(query, props.clientId)
+            .then(response => {
+                setIsFetching(false);
+                console.log(response);
+            });
+    };
+
+    // using the hook for fech data on mount component
+    useEffect(() => {
+        fetchData();
+    }, [query])
+
+    // Table stuffs
     const createData = (netPremium: number, inpatient: number, outpatient: number, specialists: number, pharmacy: number, otc: number, netRevenue: number) => {
         return { netPremium, inpatient, outpatient, specialists, pharmacy, otc, netRevenue };
     }
@@ -33,6 +76,7 @@ export default function Summary(): ReactElement {
             <Typography variant='h5' component='h1' gutterBottom align="left">
                 Summary
             </Typography>
+            {isFetching && <LinearProgress/>}
             <Divider/>
             <TableContainer>
                 <Table className={classes.table} size="medium" aria-label="a dense table">

@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
 /**
  * @description Sample App application
  * @param {ClientConfiguration} client
- * @author Frank Corona Prendes <frankdavid.corona@gmail.com>
+ * @author Frank Corona Prendes <frank.corona@primavera.care>
  */
 export default function App(client: ClientConfiguration): ReactElement {
     const classes = useStyles();
@@ -43,7 +43,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                 <Typography variant='h4' component='h1' gutterBottom>
                     Patient Insight {client.patientId}!
                 </Typography>
-                <Summary/>
+                <Summary clientId={client.clientId} patientId={client.patientId}/>
                 <HCCs/>
                 <SectionFinancial/>
                 <MemberTrendTracker/>
