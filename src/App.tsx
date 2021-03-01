@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Box, Container, makeStyles, Typography } from '@material-ui/core';
+import { Backdrop, Box, CircularProgress, Container, makeStyles, Theme, Typography } from '@material-ui/core';
 import Copyright from './components/Copyright/Copyright';
 import Summary from './components/Summary/Summary';
 import HCCs from './components/HCCs/HCCs';
@@ -12,8 +12,9 @@ import InpatientOutpatient from './components/InpatientOutpatient/InpatientOutpa
 import Specialists from './components/Specialists/Specialists';
 import Medications from './components/Medications/Medications';
 import SpecialtyBreakdown from './components/SpecialtyBreakdown/SpecialtyBreakdown';
+import { useAppState } from './state';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -26,7 +27,11 @@ const useStyles = makeStyles(() => ({
     specialists: {
         display: 'flex',
         flexDirection: 'row',
-    }
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: 'primary',
+    },
 }))
 
 /**
@@ -36,6 +41,8 @@ const useStyles = makeStyles(() => ({
  */
 export default function App(client: ClientConfiguration): ReactElement {
     const classes = useStyles();
+    // get from AppState the state of fetching actions
+    const { isFetching } = useAppState();
     const params = {
         header: client.clientId,
         query: {
@@ -47,6 +54,9 @@ export default function App(client: ClientConfiguration): ReactElement {
 
     return (
         <Container className={classes.container}>
+            <Backdrop className={classes.backdrop} open={isFetching}>
+                <CircularProgress color="inherit"/>
+            </Backdrop>
             <Box className={classes.box}>
                 <Typography variant='h4' component='h1' gutterBottom>
                     Patient Insight {client.patientId}!
