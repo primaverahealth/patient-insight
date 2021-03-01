@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 
-import { fetchPivotProps } from './getFinancialSummary';
-import { FinancialMemberResponse } from '../interfaces';
+import { fetchPivotProps, FinancialMemberResponse } from '../interfaces';
 
 
 export interface StateContextType {
