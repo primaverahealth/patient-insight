@@ -18,7 +18,7 @@ import NumberFormat from 'react-number-format';
 import Divider from '../../common/Divider/Divider';
 import { width_100 } from '../../utils/WidthUtils';
 import { useAppState } from '../../state';
-import { ComponentsProps, FinancialMemberResponse } from '../../interfaces';
+import { FinancialMemberResponse } from '../../interfaces';
 
 const useStyles = makeStyles(() => ({
     box: {
@@ -33,33 +33,21 @@ const useStyles = makeStyles(() => ({
 
 /**
  * @description Function Component for Summary section
- * @param {ComponentsProps} props
+ * @param {FinancialMemberResponse} props
  * @constructor
  */
-export default function Summary(props: ComponentsProps): ReactElement {
+export default function Summary(props: { summary: FinancialMemberResponse }): ReactElement {
     const classes = useStyles();
     // prepare to use AppState
-    const { fetchMemberFinancial, isFetching } = useAppState();
+    const { isFetching } = useAppState();
     // hook for default state of the query params to use
-    const [query] = useState({ ...props.query });
     const [dataSource, setDataSource] = useState([]);
 
-    /**
-     * @description fetch data using the AppState
-     * @author Frank Corona Prendes <frank.corona@primavera.care>
-     */
-    const fetchData = () => {
-        fetchMemberFinancial(query, props.header)
-            .then((response: any) => {
-                // @ts-ignore
-                setDataSource(mappedInformation([response.data]));
-            });
-    };
-
-    // using the hook for fech data on mount component
+    // using the hook for wait for the update of the props and update the datasource
     useEffect(() => {
-        fetchData();
-    }, [query])
+        // @ts-ignore
+        setDataSource(mappedInformation([props.summary]));
+    }, [props.summary])
 
     /**
      * @description Mapping data to represent information.
@@ -67,17 +55,26 @@ export default function Summary(props: ComponentsProps): ReactElement {
      * @author Frank Corona Prendes <frank.corona@primavera.care>
      */
     const mappedInformation = (data: FinancialMemberResponse[]) => {
-        return data.map(({ netPremium, inpatient, outpatient, specialist, totalRxExpenses, netRevenue, otc }) => {
-            const response = { netPremium, inpatient, outpatient, specialist, totalRxExpenses, netRevenue, otc };
+        return data.map(
+            ({
+                 netPremium,
+                 inpatient,
+                 outpatient,
+                 specialist,
+                 totalRxExpenses,
+                 netRevenue,
+                 otc
+             }) => {
+                const response = { netPremium, inpatient, outpatient, specialist, totalRxExpenses, netRevenue, otc };
 
-            return mapValues(response, (value) => {
-                if (isNil(value)) {
-                    value = 0;
-                }
+                return mapValues(response, (value) => {
+                    if (isNil(value)) {
+                        value = 0;
+                    }
 
-                return value;
+                    return value;
+                });
             });
-        });
     }
 
 
