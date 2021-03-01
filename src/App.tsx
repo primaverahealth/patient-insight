@@ -8,6 +8,10 @@ import { width_100 } from './utils/WidthUtils';
 import { ClientConfiguration } from './interfaces';
 import SectionFinancial from './components/SectionFinancial/SectionFinancial';
 import MemberTrendTracker from './components/MemberTrendTracker/MemberTrendTracker';
+import InpatientOutpatient from './components/InpatientOutpatient/InpatientOutpatient';
+import Specialists from './components/Specialists/Specialists';
+import Medications from './components/Medications/Medications';
+import SpecialtyBreakdown from './components/SpecialtyBreakdown/SpecialtyBreakdown';
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -18,6 +22,10 @@ const useStyles = makeStyles(() => ({
     },
     box: {
         width: 'inherit'
+    },
+    specialists: {
+        display: 'flex',
+        flexDirection: 'row',
     }
 }))
 
@@ -39,6 +47,12 @@ export default function App(client: ClientConfiguration): ReactElement {
                 <HCCs/>
                 <SectionFinancial/>
                 <MemberTrendTracker/>
+                <div className={classes.specialists}>
+                    <Specialists/>
+                    <InpatientOutpatient/>
+                </div>
+                <Medications/>
+                <SpecialtyBreakdown/>
                 <Copyright/>
             </Box>
         </Container>
