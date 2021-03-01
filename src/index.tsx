@@ -3,17 +3,20 @@ import ReactDOM from "react-dom";
 
 import App from './App';
 import { ClientConfiguration } from './interfaces';
+import AppStateProvider from './state';
 
 /**
  * @description Init React application
  * @param {ClientConfiguration} client
- * @author Frank Corona Prendes <frankdavid.corona@gmail.com>
+ * @author Frank Corona Prendes <frank.corona@primavera,care>
  */
 export const init = (client: ClientConfiguration): void => {
     ReactDOM.render(
-        <App clientId={client.clientId} patientId={client.patientId}/>,
+        <AppStateProvider>
+            <App clientId={client.clientId} patientId={client.patientId}/>
+        </AppStateProvider>,
         document.getElementById("root")
     )
 }
 
-init({ clientId: '064c46de-7783-11eb-9439-0242ac130002', patientId: 'Corona, Frank David' });
+init({ clientId: '5ab930c364bfb1001b01b781', patientId: '5cde37727b58b1001a2661a4' });
