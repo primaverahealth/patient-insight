@@ -12,6 +12,7 @@
     "@material-ui/core": "^4.11.3",
     "@material-ui/data-grid": "^4.0.0-alpha.20",
     "express": "^4.17.1",
+    "lodash": "^4.17.21",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-number-format": "^4.4.4"
@@ -26,6 +27,7 @@
     "@babel/preset-typescript": "^7.13.0",
     "@babel/runtime": "^7.13.7",
     "@types/fork-ts-checker-webpack-plugin": "^0.4.5",
+    "@types/lodash": "^4.14.168",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
     "@types/webpack": "^4.41.26",
