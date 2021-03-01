@@ -40,17 +40,13 @@ export default function Summary(props: ComponentsProps): ReactElement {
     // prepare to use AppState
     const { fetchPivot } = useAppState();
     // hook for default state of the query params to use
-    const [query] = useState({
-        patientId: props.patientId,
-        from: "2020-04-01",
-        to: "2021-03-01"
-    });
+    const [query] = useState({ ...props.query });
     const [isFetching, setIsFetching] = useState(false);
 
     // get data using the AppState
     const fetchData = () => {
         setIsFetching(true);
-        fetchPivot(query, props.clientId)
+        fetchPivot(query, props.header)
             .then(response => {
                 setIsFetching(false);
                 console.log(response);

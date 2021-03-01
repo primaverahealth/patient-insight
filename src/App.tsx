@@ -36,6 +36,14 @@ const useStyles = makeStyles(() => ({
  */
 export default function App(client: ClientConfiguration): ReactElement {
     const classes = useStyles();
+    const params = {
+        header: client.clientId,
+        query: {
+            patientId: client.patientId,
+            from: "2020-04-01",
+            to: "2021-03-01"
+        }
+    };
 
     return (
         <Container className={classes.container}>
@@ -43,7 +51,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                 <Typography variant='h4' component='h1' gutterBottom>
                     Patient Insight {client.patientId}!
                 </Typography>
-                <Summary clientId={client.clientId} patientId={client.patientId}/>
+                <Summary query={params.query} header={params.header}/>
                 <HCCs/>
                 <SectionFinancial/>
                 <MemberTrendTracker/>
