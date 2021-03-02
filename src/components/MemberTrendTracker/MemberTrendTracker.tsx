@@ -21,6 +21,11 @@ import { getDate, getMonthsBetweenDates, width_100 } from '../../utils';
 import TrendStatus from '../TrendStatus/TrendStatus';
 import { useAppState } from '../../state';
 
+export interface TrendProps {
+    data: any[],
+    date: string
+}
+
 const useStyles = makeStyles(() => ({
     box: {
         padding: '12px',
@@ -36,7 +41,7 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function MemberTrendTracker(props: { trend: any, toggleSource: Function }): ReactElement {
+export default function MemberTrendTracker(props: { trend: TrendProps[], toggleSource: Function }): ReactElement {
     const classes = useStyles();
     const { isFetchingTrend } = useAppState();
     // Handling React Hooks

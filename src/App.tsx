@@ -53,7 +53,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     });
     const [financialSummary, setFinancialSummary] = useState({});
     const [hospitalPivot, setHospitalPivot] = useState({});
-    const [memberTrend, setMemberTrend] = useState({});
+    const [memberTrend, setMemberTrend] = useState([]);
 
     /**
      * @description Using AppState to get all nested data for components

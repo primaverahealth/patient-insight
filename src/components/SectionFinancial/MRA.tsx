@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { Paper } from '@material-ui/core';
 import moment from 'moment';
 
-import { commonStyles } from '../../utils/CommonStyles';
+import { commonStyles } from '../../utils';
 import DoubleValues from '../../common/DoubleValues/DoubleValues';
 import FinancialFooter from '../../common/FinancialFooter/FinancialFooter';
 import { DoubleValuesProps, FinancialFooterProps, FinancialWidgetsProps } from '../../interfaces';

@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Paper } from '@material-ui/core';
 
-import { commonStyles } from '../../utils/CommonStyles';
+import { commonStyles } from '../../utils';
 import DoubleValues from '../../common/DoubleValues/DoubleValues';
 import { DoubleValuesProps, FinancialFooterProps, FinancialWidgetsProps } from '../../interfaces';
 import FinancialFooter from '../../common/FinancialFooter/FinancialFooter';
