@@ -1,18 +1,22 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { Paper } from '@material-ui/core';
+import moment from 'moment';
 
 import { commonStyles } from '../../utils/CommonStyles';
 import DoubleValues from '../../common/DoubleValues/DoubleValues';
-import { DoubleValuesProps, FinancialFooterProps } from '../../interfaces';
 import FinancialFooter from '../../common/FinancialFooter/FinancialFooter';
+import { DoubleValuesProps, FinancialFooterProps, FinancialWidgetsProps } from '../../interfaces';
 
 
-export default function MRA(): ReactElement {
+export default function MRA(props: { data: FinancialWidgetsProps }): ReactElement {
     const common = commonStyles();
+    const { data } = props;
+    const [prevYear] = useState(moment().subtract(1, 'year').format('YYYY'));
+    const [currentYear] = useState(moment().format('YYYY'));
     const doubleValueProps: DoubleValuesProps = {
         data: [
-            { value: 1.61, description: '(2019)' },
-            { value: 1.50, description: '(2020)' }
+            { value: data.lastYearMRA, description: `${prevYear}` },
+            { value: data.lastMRA, description: `${currentYear}` }
         ]
     }
     const footerProps: FinancialFooterProps = { data: { name: 'MRA' } };

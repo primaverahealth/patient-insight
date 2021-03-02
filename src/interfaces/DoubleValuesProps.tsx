@@ -1,6 +1,6 @@
 export interface IDoubleValues {
-    value: number,
-    description: string;
+    value?: number,
+    description?: string;
 }
 
 export interface DoubleValuesProps {

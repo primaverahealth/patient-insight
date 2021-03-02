@@ -5,5 +5,14 @@ export interface FinancialMemberResponse {
     specialist?: number,
     totalRxExpenses?: number,
     netRevenue?: number,
-    otc?: number
+    otc?: number,
+    ipAdmits?: number,
+    readmissions?: number,
+    rxCount?: number,
+    rxGeneric?: number,
+    er?: number,
+    lastMRA?: number,
+    lastYearMRA?: number,
+    mlr?: number,
+    efr?: number,
 }
