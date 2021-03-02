@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import {
     Avatar,
@@ -45,10 +45,10 @@ export default function MemberTrendTracker(props: { trend: TrendProps[], toggleS
     const classes = useStyles();
     const { isFetchingTrend } = useAppState();
     // Handling React Hooks
-    const [filterAvatar, setFilterAvatar] = useState('R');
-    const [isRevenue, setIsRevenue] = useState(true);
-    const [dataSource, setDataSource] = useState([]);
-    const [columns, setColumns] = useState([]);
+    const [filterAvatar, setFilterAvatar] = React.useState('R');
+    const [isRevenue, setIsRevenue] = React.useState(true);
+    const [dataSource, setDataSource] = React.useState([]);
+    const [columns, setColumns] = React.useState([]);
 
     const handleFilter = () => {
         setIsRevenue((prevState => !prevState));

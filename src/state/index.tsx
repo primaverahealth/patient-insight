@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import { omit } from 'lodash';
 
 import { fetchPivotProps } from '../interfaces';
@@ -19,9 +19,9 @@ export interface StateContextType {
 export const StateContext = createContext<StateContextType>(null!);
 
 export default function AppStateProvider(props: React.PropsWithChildren<{}>): JSX.Element {
-    const [error, setError] = useState<Error | null>(null);
-    const [isFetching, setIsFetching] = useState(false);
-    const [isFetchingTrend, setIsFetchingTrend] = useState(false);
+    const [error, setError] = React.useState<Error | null>(null);
+    const [isFetching, setIsFetching] = React.useState(false);
+    const [isFetchingTrend, setIsFetchingTrend] = React.useState(false);
 
     let contextValue = {
         error,

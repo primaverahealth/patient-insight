@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { Backdrop, Box, CircularProgress, Container, makeStyles, Theme, Typography } from '@material-ui/core';
 import Copyright from './components/Copyright/Copyright';
 import Summary from './components/Summary/Summary';
@@ -44,17 +44,17 @@ export default function App(client: ClientConfiguration): ReactElement {
     // get from AppState the state of fetching actions
     const { isFetching, fetchData, fetchTrend } = useAppState();
     // react hooks
-    const [clientId] = useState(client.clientId);
-    const [query] = useState({
+    const [clientId] = React.useState(client.clientId);
+    const [query] = React.useState({
         patientId: client.patientId,
         from: "2020-10-01",
         to: "2021-03-02",
         source: 'mmr'
     });
-    const [financialSummary, setFinancialSummary] = useState({});
-    const [hospitalPivot, setHospitalPivot] = useState({});
-    const [memberTrend, setMemberTrend] = useState([]);
-    const [memberMedications, setMedications] = useState([]);
+    const [financialSummary, setFinancialSummary] = React.useState({});
+    const [hospitalPivot, setHospitalPivot] = React.useState({});
+    const [memberTrend, setMemberTrend] = React.useState([]);
+    const [memberMedications, setMedications] = React.useState([]);
 
     /**
      * @description Using AppState to get all nested data for components

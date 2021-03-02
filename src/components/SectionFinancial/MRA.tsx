@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import { Paper } from '@material-ui/core';
 import moment from 'moment';
 
@@ -11,8 +11,8 @@ import { DoubleValuesProps, FinancialFooterProps, FinancialWidgetsProps } from '
 export default function MRA(props: { data: FinancialWidgetsProps }): ReactElement {
     const common = commonStyles();
     const { data } = props;
-    const [prevYear] = useState(moment().subtract(1, 'year').format('YYYY'));
-    const [currentYear] = useState(moment().format('YYYY'));
+    const [prevYear] = React.useState(moment().subtract(1, 'year').format('YYYY'));
+    const [currentYear] = React.useState(moment().format('YYYY'));
     const doubleValueProps: DoubleValuesProps = {
         data: [
             { value: data.lastYearMRA, description: `${prevYear}` },

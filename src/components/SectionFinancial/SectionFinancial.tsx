@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { filter, get, isNil, round, sumBy } from 'lodash';
 
@@ -31,7 +31,7 @@ export default function SectionFinancial(props: SectionFinancialProps): ReactEle
 
     const { isFetching } = useAppState();
     // hook for default state of the query params to use
-    const [dataSource, setDataSource] = useState({});
+    const [dataSource, setDataSource] = React.useState({});
 
     // using the hook for wait for the update of the props and update the datasource
     useEffect(() => {

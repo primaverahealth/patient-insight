@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import { makeStyles, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
@@ -23,8 +23,8 @@ const useStyles = makeStyles(() => ({
 
 export default function HCCs(): ReactElement {
     const classes = useStyles();
-    const [prevYear] = useState(moment().subtract(1, 'year').format('YYYY'));
-    const [currentYear] = useState(moment().format('YYYY'));
+    const [prevYear] = React.useState(moment().subtract(1, 'year').format('YYYY'));
+    const [currentYear] = React.useState(moment().format('YYYY'));
 
     return (
         <div className={classes.root}>

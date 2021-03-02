@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import {
     LinearProgress,
@@ -49,7 +49,7 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
     // prepare to use AppState
     const { isFetching } = useAppState();
     // hook for default state of the query params to use
-    const [dataSource, setDataSource] = useState([]);
+    const [dataSource, setDataSource] = React.useState([]);
 
     // using the hook for wait for the update of the props and update the datasource
     useEffect(() => {
