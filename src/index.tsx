@@ -19,4 +19,4 @@ export const init = (client: ClientConfiguration): void => {
     )
 }
 
-init({ clientId: '5ab930c364bfb1001b01b781', patientId: '5cde37727b58b1001a2661a4' });
+init({ clientId: '5ab930c364bfb1001b01b781', patientId: '5c082b909a56900018322073' });
