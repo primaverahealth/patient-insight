@@ -3,16 +3,17 @@ import { Paper } from '@material-ui/core';
 
 import { commonStyles } from '../../utils/CommonStyles';
 import DoubleValues from '../../common/DoubleValues/DoubleValues';
-import { DoubleValuesProps, FinancialFooterProps } from '../../interfaces';
+import { DoubleValuesProps, FinancialFooterProps, FinancialWidgetsProps } from '../../interfaces';
 import FinancialFooter from '../../common/FinancialFooter/FinancialFooter';
 
 
-export default function ERVisits(): ReactElement {
+export default function ERVisits(props: { data: FinancialWidgetsProps }): ReactElement {
     const common = commonStyles();
+    const { data } = props;
     const doubleValueProps: DoubleValuesProps = {
         data: [
-            { value: 1, description: 'Claims' },
-            { value: 0, description: 'ENS' }
+            { value: data.erVisits, description: 'Claims' },
+            { value: data.totalErVisits, description: 'ENS' }
         ]
     }
     const footerProps: FinancialFooterProps = { data: { name: 'ER Visits' } };

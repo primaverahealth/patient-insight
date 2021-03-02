@@ -64,7 +64,7 @@ export default function SectionFinancial(props: SectionFinancialProps): ReactEle
             <div>
                 <div className={classes.root}>
                     <MRA data={dataSource}/>
-                    <ERVisits/>
+                    <ERVisits data={dataSource}/>
                     <IPAdmits/>
                 </div>
                 <div className={classes.root}>
