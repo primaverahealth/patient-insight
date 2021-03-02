@@ -1,5 +1,5 @@
 export interface ISingleValue {
-    value: number
+    value?: number
 }
 
 export interface SingleValueProps {
