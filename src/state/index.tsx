@@ -5,11 +5,14 @@ import { fetchPivotProps, FinancialMemberResponse } from '../interfaces';
 
 export interface StateContextType {
     error: Error | null;
+    isFetching: boolean,
     isFetchingFinancial: boolean,
     isFetchingHospPivot: boolean,
     isFetchingPivot: boolean,
 
     setError(error: Error | null): void;
+
+    fetchData(params: fetchPivotProps, clientId: string): Promise<any>;
 
     fetchPivot(params: fetchPivotProps, clientId: string): Promise<Response>;
 
@@ -25,10 +28,12 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
     const [isFetchingFinancial, setIsFetchingFinancial] = useState(false);
     const [isFetchingHospPivot, setIsFetchingHospPivot] = useState(false);
     const [isFetchingPivot, setIsFetchingPivot] = useState(false);
+    const [isFetching, setIsFetching] = useState(false);
 
     let contextValue = {
         error,
         setError,
+        isFetching,
         isFetchingFinancial,
         isFetchingHospPivot,
         isFetchingPivot
@@ -36,6 +41,54 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
 
     contextValue = {
         ...contextValue,
+
+        /**
+         * @description Fetch all data inside the same Promise
+         * @param params
+         * @param clientId
+         * @author Frank Corona Prendes <frank.corona@primavera.care>
+         */
+        fetchData: async (params: fetchPivotProps, clientId: string) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { patientId, ...queryParams } = params;
+            return Promise.all([
+                fetch(`https://api.primaverahealthcare.com/financial-summary-detail/pivot`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-tenant': clientId
+                    },
+                    body: JSON.stringify({ ...params }),
+                }),
+
+                fetch(`https://api.primaverahealthcare.com/financial-member/${params.patientId}`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-tenant': clientId
+                    },
+                    body: JSON.stringify({ ...queryParams }),
+                }),
+
+                fetch(`https://api.primaverahealthcare.com/hospitalization/pivot`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-tenant': clientId
+                    },
+                    body: JSON.stringify({ patientId: params.patientId, groupBy: 'byType' }),
+                })
+            ]).then(([pivot, financialMember, hospPivot]) => {
+                return { pivot: pivot.json(), financialMember: financialMember.json(), hospPivot: hospPivot.json() }
+            })
+        },
+
+        /**
+         * @description Fetch financial member data
+         * @param params
+         * @param clientId
+         * @author Frank Corona Prendes <frank.corona@primavera.care>
+         */
         fetchMemberFinancial: async (params: fetchPivotProps, clientId: string) => {
             // Omit specific key from object using vanilla: https://stackoverflow.com/a/60195209/3724184
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,6 +102,13 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                 body: JSON.stringify({ ...queryParams }),
             }).then(response => response.json());
         },
+
+        /**
+         * @description Fetch financial summary pivot data
+         * @param params
+         * @param clientId
+         * @author Frank Corona Prendes <frank.corona@primavera.care>
+         */
         fetchPivot: async (params: fetchPivotProps, clientId: string) => {
             return fetch(`https://api.primaverahealthcare.com/financial-summary-detail/pivot`, {
                 method: 'POST',
@@ -59,6 +119,13 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                 body: JSON.stringify({ ...params }),
             }).then(response => response.json());
         },
+
+        /**
+         * @description Fetch hospitalization pivot data
+         * @param patientId
+         * @param clientId
+         * @author Frank Corona Prendes <frank.corona@primavera.care>
+         */
         fetchHospitalizationPivot: async (patientId: string, clientId: string) => {
             return fetch(`https://api.primaverahealthcare.com/hospitalization/pivot`, {
                 method: 'POST',
@@ -119,9 +186,26 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
             });
     };
 
+    const fetchData: StateContextType['fetchData'] = (params: fetchPivotProps, clientId: string) => {
+        setIsFetching(true);
+        return contextValue
+            .fetchData(params, clientId)
+            .then(res => {
+                setIsFetching(false);
+                return res;
+            })
+            .then(data => data)
+            .catch(err => {
+                setError(err);
+                setIsFetching(false);
+                return Promise.reject(err);
+            });
+    };
+
     return <StateContext.Provider
         value={{
             ...contextValue,
+            fetchData,
             fetchMemberFinancial,
             fetchPivot,
             fetchHospitalizationPivot
