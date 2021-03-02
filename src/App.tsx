@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function App(client: ClientConfiguration): ReactElement {
     const classes = useStyles();
     // get from AppState the state of fetching actions
-    const { isFetching, fetchData } = useAppState();
+    const { isFetching, fetchData, fetchTrend } = useAppState();
     // react hooks
     const [clientId] = useState(client.clientId);
     const [query] = useState({
@@ -68,6 +68,16 @@ export default function App(client: ClientConfiguration): ReactElement {
             });
     };
 
+    /**
+     * @description Toggle source filter for Trend Tracker
+     * @param {string} source
+     * @author Frank Corona Prendes <frank.corona@primavera.care>
+     */
+    const toggleSource = (source: string) => {
+        fetchTrend({ ...query, source }, clientId)
+            .then((response: any) => setMemberTrend(response.data))
+    }
+
     // using the hook for fech data on mount component
     useEffect(() => {
         fetchAllata()
@@ -87,7 +97,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                     <Summary summary={financialSummary}/>
                     <HCCs/>
                     <SectionFinancial data={{ financialSummary, hospitalPivot }}/>
-                    <MemberTrendTracker trend={memberTrend}/>
+                    <MemberTrendTracker trend={memberTrend} toggleSource={toggleSource}/>
                     <div className={classes.specialists}>
                         <Specialists/>
                         <InpatientOutpatient/>

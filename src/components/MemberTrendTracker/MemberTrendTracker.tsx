@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import {
     Avatar,
     Chip,
+    LinearProgress,
     makeStyles,
     Paper,
     Table,
@@ -18,6 +19,7 @@ import { includes, keys, map } from 'lodash';
 import Divider from '../../common/Divider/Divider';
 import { getDate, getMonthsBetweenDates, width_100 } from '../../utils';
 import TrendStatus from '../TrendStatus/TrendStatus';
+import { useAppState } from '../../state';
 
 const useStyles = makeStyles(() => ({
     box: {
@@ -34,8 +36,9 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function MemberTrendTracker(props: { trend: any }): ReactElement {
+export default function MemberTrendTracker(props: { trend: any, toggleSource: Function }): ReactElement {
     const classes = useStyles();
+    const { isFetchingTrend } = useAppState();
     // Handling React Hooks
     const [filterAvatar, setFilterAvatar] = useState('R');
     const [isRevenue, setIsRevenue] = useState(true);
@@ -44,7 +47,10 @@ export default function MemberTrendTracker(props: { trend: any }): ReactElement 
 
     const handleFilter = () => {
         setIsRevenue((prevState => !prevState));
+        const source = !isRevenue ? 'mmr' : 'eligibility';
+        props.toggleSource(source);
     }
+
     useEffect(() => {
         const { from, to } = getDate('l6m');
         const months = getMonthsBetweenDates(moment(from), moment(to));
@@ -86,26 +92,29 @@ export default function MemberTrendTracker(props: { trend: any }): ReactElement 
                 />
             </div>
             <Divider/>
-            <TableContainer>
-                <Table className={classes.table} size="medium" aria-label="a dense table">
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell align="left" key={column}>{column}</TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell key={column} align="center">
-                                    <TrendStatus value={dataSource[column]}/>
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            {isFetchingTrend
+                ? <LinearProgress/>
+                : <TableContainer>
+                    <Table className={classes.table} size="medium" aria-label="a dense table">
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell align="left" key={column}>{column}</TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell key={column} align="center">
+                                        <TrendStatus value={dataSource[column]}/>
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            }
         </Paper>
     );
 }

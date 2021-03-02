@@ -15,10 +15,10 @@ import { isNil, mapValues } from 'lodash';
 // https://www.npmjs.com/package/react-number-format
 import NumberFormat from 'react-number-format';
 
-import Divider from '../../common/Divider/Divider';
-import { width_100 } from '../../utils/WidthUtils';
 import { useAppState } from '../../state';
+import { width_100 } from '../../utils';
 import { FinancialMemberResponse } from '../../interfaces';
+import Divider from '../../common/Divider/Divider';
 
 const useStyles = makeStyles(() => ({
     box: {
@@ -91,88 +91,88 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
             <Typography variant='h5' component='h1' gutterBottom align="left">
                 Summary
             </Typography>
-            {isFetching && <LinearProgress/>}
-            {!isFetching &&
-            <>
-                <Divider/>
-                <TableContainer>
-                    <Table className={classes.table} size="medium" aria-label="a dense table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="right">Net Premium</TableCell>
-                                <TableCell align="right">Inpatient</TableCell>
-                                <TableCell align="right">Outpatient</TableCell>
-                                <TableCell align="right">Specialist</TableCell>
-                                <TableCell align="right">Pharmacy</TableCell>
-                                <TableCell align="right">OTC</TableCell>
-                                <TableCell align="right">Net Revenue</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {dataSource.map((row: FinancialMemberResponse) => (
-                                <TableRow key={row.inpatient}>
-                                    <TableCell align="right">
-                                        <NumberFormat value={row.netPremium}
-                                                      displayType={'text'}
-                                                      thousandSeparator={true}
-                                                      decimalScale={2}
-                                                      className={classes.action}
-                                                      prefix={'$'}/>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <NumberFormat value={row.inpatient}
-                                                      displayType={'text'}
-                                                      thousandSeparator={true}
-                                                      decimalScale={2}
-                                                      className={classes.action}
-                                                      prefix={'$'}/>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <NumberFormat value={row.outpatient}
-                                                      displayType={'text'}
-                                                      thousandSeparator={true}
-                                                      decimalScale={2}
-                                                      className={classes.action}
-                                                      prefix={'$'}/>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <NumberFormat value={row.specialist}
-                                                      displayType={'text'}
-                                                      thousandSeparator={true}
-                                                      decimalScale={2}
-                                                      className={classes.action}
-                                                      prefix={'$'}/>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <NumberFormat value={row.totalRxExpenses}
-                                                      displayType={'text'}
-                                                      thousandSeparator={true}
-                                                      decimalScale={2}
-                                                      className={classes.action}
-                                                      prefix={'$'}/>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <NumberFormat value={row.otc}
-                                                      displayType={'text'}
-                                                      thousandSeparator={true}
-                                                      decimalScale={2}
-                                                      className={classes.action}
-                                                      prefix={'$'}/>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <NumberFormat value={row.netRevenue}
-                                                      displayType={'text'}
-                                                      thousandSeparator={true}
-                                                      decimalScale={2}
-                                                      className={classes.action}
-                                                      prefix={'$'}/>
-                                    </TableCell>
+            {isFetching
+                ? <LinearProgress/>
+                : <>
+                    <Divider/>
+                    <TableContainer>
+                        <Table className={classes.table} size="medium" aria-label="a dense table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="right">Net Premium</TableCell>
+                                    <TableCell align="right">Inpatient</TableCell>
+                                    <TableCell align="right">Outpatient</TableCell>
+                                    <TableCell align="right">Specialist</TableCell>
+                                    <TableCell align="right">Pharmacy</TableCell>
+                                    <TableCell align="right">OTC</TableCell>
+                                    <TableCell align="right">Net Revenue</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </>
+                            </TableHead>
+                            <TableBody>
+                                {dataSource.map((row: FinancialMemberResponse) => (
+                                    <TableRow key={row.inpatient}>
+                                        <TableCell align="right">
+                                            <NumberFormat value={row.netPremium}
+                                                          displayType={'text'}
+                                                          thousandSeparator={true}
+                                                          decimalScale={2}
+                                                          className={classes.action}
+                                                          prefix={'$'}/>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <NumberFormat value={row.inpatient}
+                                                          displayType={'text'}
+                                                          thousandSeparator={true}
+                                                          decimalScale={2}
+                                                          className={classes.action}
+                                                          prefix={'$'}/>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <NumberFormat value={row.outpatient}
+                                                          displayType={'text'}
+                                                          thousandSeparator={true}
+                                                          decimalScale={2}
+                                                          className={classes.action}
+                                                          prefix={'$'}/>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <NumberFormat value={row.specialist}
+                                                          displayType={'text'}
+                                                          thousandSeparator={true}
+                                                          decimalScale={2}
+                                                          className={classes.action}
+                                                          prefix={'$'}/>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <NumberFormat value={row.totalRxExpenses}
+                                                          displayType={'text'}
+                                                          thousandSeparator={true}
+                                                          decimalScale={2}
+                                                          className={classes.action}
+                                                          prefix={'$'}/>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <NumberFormat value={row.otc}
+                                                          displayType={'text'}
+                                                          thousandSeparator={true}
+                                                          decimalScale={2}
+                                                          className={classes.action}
+                                                          prefix={'$'}/>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <NumberFormat value={row.netRevenue}
+                                                          displayType={'text'}
+                                                          thousandSeparator={true}
+                                                          decimalScale={2}
+                                                          className={classes.action}
+                                                          prefix={'$'}/>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </>
             }
         </Paper>
     );

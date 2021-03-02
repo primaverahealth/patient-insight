@@ -7,10 +7,13 @@ import { fetchPivotProps } from '../interfaces';
 export interface StateContextType {
     error: Error | null;
     isFetching: boolean,
+    isFetchingTrend: boolean,
 
     setError(error: Error | null): void;
 
     fetchData(params: fetchPivotProps, clientId: string): Promise<any>;
+
+    fetchTrend(params: fetchPivotProps, clientId: string): Promise<any>;
 }
 
 export const StateContext = createContext<StateContextType>(null!);
@@ -18,11 +21,13 @@ export const StateContext = createContext<StateContextType>(null!);
 export default function AppStateProvider(props: React.PropsWithChildren<{}>): JSX.Element {
     const [error, setError] = useState<Error | null>(null);
     const [isFetching, setIsFetching] = useState(false);
+    const [isFetchingTrend, setIsFetchingTrend] = useState(false);
 
     let contextValue = {
         error,
         setError,
         isFetching,
+        isFetchingTrend,
     } as StateContextType;
 
     contextValue = {
@@ -82,7 +87,18 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                     trend: trend.json()
                 }
             })
-        }
+        },
+
+        fetchTrend: async (params: fetchPivotProps, clientId: string) => {
+            return fetch(`https://api.primaverahealthcare.com/members/trend`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'x-tenant': clientId
+                },
+                body: JSON.stringify({ ...params }),
+            }).then(response => response.json());
+        },
     }
 
     const fetchData: StateContextType['fetchData'] = (params: fetchPivotProps, clientId: string) => {
@@ -101,10 +117,27 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
             });
     };
 
+    const fetchTrend: StateContextType['fetchTrend'] = (params: fetchPivotProps, clientId: string) => {
+        setIsFetchingTrend(true);
+        return contextValue
+            .fetchTrend(params, clientId)
+            .then(res => {
+                setIsFetchingTrend(false);
+                return res;
+            })
+            .then(data => data)
+            .catch(err => {
+                setError(err);
+                setIsFetchingTrend(false);
+                return Promise.reject(err);
+            });
+    };
+
     return <StateContext.Provider
         value={{
             ...contextValue,
             fetchData,
+            fetchTrend,
         }}>{props.children}
     </StateContext.Provider>;
 }
