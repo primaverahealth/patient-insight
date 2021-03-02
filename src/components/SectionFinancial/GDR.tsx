@@ -11,7 +11,7 @@ export default function GDR(props: { data: FinancialWidgetsProps }): ReactElemen
     const common = commonStyles();
     const { data } = props;
     const [gdr, setGDR] = useState(0);
-    const singleValueProps: SingleValueProps = { data: { value: gdr } }
+    const singleValueProps: SingleValueProps = { data: { key: 'gdr', value: gdr } }
     const footerProps: FinancialFooterProps = { data: { name: 'GDR' } };
 
     useEffect(() => {

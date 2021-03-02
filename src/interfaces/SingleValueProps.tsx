@@ -1,5 +1,6 @@
 export interface ISingleValue {
-    value?: number
+    value?: number,
+    key?: string,
 }
 
 export interface SingleValueProps {

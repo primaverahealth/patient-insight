@@ -29,7 +29,22 @@ export default function SingleValue(props: SingleValueProps): ReactElement {
     const styles = useStyles();
     const { data } = props;
     const isNegative = (value: number | undefined) => {
-        return (!isNil(value)) && (value > 100) ? styles.negativeValue : styles.value;
+        let style;
+        // GDR > 90 normal < 90 negative
+        // MLR < 85 normal >= 85 negative
+        switch (data.key) {
+            case 'gdr':
+                style = (!isNil(value)) && (value < 90) ? styles.negativeValue : styles.value;
+                break;
+
+            case 'mlr':
+                style = (!isNil(value)) && (value >= 85) ? styles.negativeValue : styles.value;
+                break;
+
+            default:
+                style = styles.value;
+        }
+        return style;
     }
 
     return (

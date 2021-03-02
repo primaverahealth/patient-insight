@@ -11,7 +11,7 @@ export default function MLR(props: { data: FinancialWidgetsProps }): ReactElemen
     const common = commonStyles();
     const { data } = props;
     const [mlr, setMLR] = useState(0);
-    const singleValueProps: SingleValueProps = { data: { value: mlr } }
+    const singleValueProps: SingleValueProps = { data: { key: 'mlr', value: mlr } }
     const footerProps: FinancialFooterProps = { data: { name: 'MLR' } };
 
     useEffect(() => {
