@@ -12,9 +12,11 @@ import {
     TableHead,
     TableRow
 } from '@material-ui/core';
+import moment from 'moment';
+import { includes, keys, map } from 'lodash';
 
 import Divider from '../../common/Divider/Divider';
-import { width_100 } from '../../utils/WidthUtils';
+import { getDate, getMonthsBetweenDates, width_100 } from '../../utils';
 import TrendStatus from '../TrendStatus/TrendStatus';
 
 const useStyles = makeStyles(() => ({
@@ -32,27 +34,42 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function MemberTrendTracker(): ReactElement {
+export default function MemberTrendTracker(props: { trend: any }): ReactElement {
     const classes = useStyles();
-    const createData = (mar2020: string, apr2020: string, may2020: string, jun2020: string, jul2020: string, aug2020: string, sep2020: string) => {
-        return { mar2020, apr2020, may2020, jun2020, jul2020, aug2020, sep2020 };
-    }
-    const rows = [
-        createData('active', 'active', 'inactive', 'active', 'inactive', 'active', 'active'),
-    ];
-
     // Handling React Hooks
     const [filterAvatar, setFilterAvatar] = useState('R');
     const [isRevenue, setIsRevenue] = useState(true);
+    const [dataSource, setDataSource] = useState([]);
+    const [columns, setColumns] = useState([]);
+
     const handleFilter = () => {
         setIsRevenue((prevState => !prevState));
     }
     useEffect(() => {
+        const { from, to } = getDate('l6m');
+        const months = getMonthsBetweenDates(moment(from), moment(to));
+
+        /**
+         * Conform data-source for datatable.
+         * dataSource = [{'': 'Status', 'Nov, 2017': 1, 'Dec, 2017': 0}]
+         */
+        const source: any = {};
+        source[''] = 'Status';
+        const responseMonths = map(props.trend, (item) => {
+            return moment(item.date).format('MMM, YYYY');
+        });
+        months.map((month: string) => source[month] = includes(responseMonths, month) ? 'active' : 'inactive');
+
+        // @ts-ignore
+        setColumns(keys(source));
+        // @ts-ignore
+        setDataSource(source)
+
         // update the avatar
         setFilterAvatar(() => isRevenue ? 'R' : 'E');
         // make the API call
         // ...
-    }, [isRevenue])
+    }, [isRevenue, props.trend])
 
     return (
         <Paper elevation={1} className={classes.box}>
@@ -73,41 +90,19 @@ export default function MemberTrendTracker(): ReactElement {
                 <Table className={classes.table} size="medium" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center">{''}</TableCell>
-                            <TableCell align="left">Mar, 2020</TableCell>
-                            <TableCell align="left">Apr, 2020</TableCell>
-                            <TableCell align="left">Jun, 2020</TableCell>
-                            <TableCell align="left">Jul, 2020</TableCell>
-                            <TableCell align="left">Aug, 2020</TableCell>
-                            <TableCell align="left">Sep, 2020</TableCell>
+                            {columns.map((column) => (
+                                <TableCell align="left" key={column}>{column}</TableCell>
+                            ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow key={row.mar2020}>
-                                <TableCell align="center">
-                                    {'Status'}
+                        <TableRow>
+                            {columns.map((column) => (
+                                <TableCell key={column} align="center">
+                                    <TrendStatus value={dataSource[column]}/>
                                 </TableCell>
-                                <TableCell align="center">
-                                    <TrendStatus value={row.mar2020}/>
-                                </TableCell>
-                                <TableCell align="center">
-                                    <TrendStatus value={row.apr2020}/>
-                                </TableCell>
-                                <TableCell align="center">
-                                    <TrendStatus value={row.may2020}/>
-                                </TableCell>
-                                <TableCell align="center">
-                                    <TrendStatus value={row.jun2020}/>
-                                </TableCell>
-                                <TableCell align="center">
-                                    <TrendStatus value={row.jul2020}/>
-                                </TableCell>
-                                <TableCell align="center">
-                                    <TrendStatus value={row.aug2020}/>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                            ))}
+                        </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>

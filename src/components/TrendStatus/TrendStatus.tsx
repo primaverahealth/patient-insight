@@ -2,8 +2,7 @@ import React, { ReactElement } from 'react';
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 
-import { toTitleCase } from '../../utils/ToTitleCase';
-import { width_50 } from '../../utils/WidthUtils';
+import { toTitleCase, width_50 } from '../../utils';
 
 const useStyles = makeStyles(() => ({
     badgeContainer: {
@@ -35,16 +34,22 @@ const useStyles = makeStyles(() => ({
 
 export default function TrendStatus(props: { value: string }): ReactElement {
     const classes = useStyles();
-    const isActive = (value: string) => Object.is(value, 'active') ? classes.badgeActive : classes.badgeInActive;
+    const isActive = (param: string) => Object.is(param, 'active') ? classes.badgeActive : classes.badgeInActive;
+
 
     return (
-        <div className={classes.badgeContainer}>
-            <small className={isActive(props.value)}>
-                &#8226;
-            </small>
-            <span className={classes.span}>
-                <Typography variant={'caption'} className={classes.typo}>{toTitleCase(props.value)}</Typography>
-            </span>
-        </div>
+        <>
+            {Object.is(props.value, 'Status')
+                ? <Typography variant={'caption'} className={classes.typo}>{toTitleCase(props.value)}</Typography>
+                : <div className={classes.badgeContainer}>
+                    <small className={isActive(props.value)}>
+                        &#8226;
+                    </small>
+                    <span className={classes.span}>
+                        <Typography variant={'caption'} className={classes.typo}>{toTitleCase(props.value)}</Typography>
+                    </span>
+                </div>
+            }
+        </>
     );
 }

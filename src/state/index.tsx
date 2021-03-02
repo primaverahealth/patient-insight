@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { omit } from 'lodash';
 
 import { fetchPivotProps, FinancialMemberResponse } from '../interfaces';
 
@@ -49,8 +50,6 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
          * @author Frank Corona Prendes <frank.corona@primavera.care>
          */
         fetchData: async (params: fetchPivotProps, clientId: string) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { patientId, ...queryParams } = params;
             return Promise.all([
                 fetch(`https://api.primaverahealthcare.com/financial-summary-detail/pivot`, {
                     method: 'POST',
@@ -58,7 +57,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                         'content-type': 'application/json',
                         'x-tenant': clientId
                     },
-                    body: JSON.stringify({ ...params }),
+                    body: JSON.stringify({ ...omit(params, ['source']) }),
                 }),
 
                 fetch(`https://api.primaverahealthcare.com/financial-member/${params.patientId}`, {
@@ -67,7 +66,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                         'content-type': 'application/json',
                         'x-tenant': clientId
                     },
-                    body: JSON.stringify({ ...queryParams }),
+                    body: JSON.stringify({ ...omit(params, ['source', 'patientId']) }),
                 }),
 
                 fetch(`https://api.primaverahealthcare.com/hospitalization/pivot`, {
@@ -76,10 +75,27 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                         'content-type': 'application/json',
                         'x-tenant': clientId
                     },
-                    body: JSON.stringify({ patientId: params.patientId, groupBy: 'byType' }),
+                    body: JSON.stringify({
+                        patientId: params.patientId,
+                        groupBy: 'byType'
+                    }),
+                }),
+
+                fetch(`https://api.primaverahealthcare.com/members/trend`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-tenant': clientId
+                    },
+                    body: JSON.stringify({ ...params }),
                 })
-            ]).then(([pivot, financialMember, hospPivot]) => {
-                return { pivot: pivot.json(), financialMember: financialMember.json(), hospPivot: hospPivot.json() }
+            ]).then(([pivot, financialMember, hospPivot, trend]) => {
+                return {
+                    pivot: pivot.json(),
+                    financialMember: financialMember.json(),
+                    hospPivot: hospPivot.json(),
+                    trend: trend.json()
+                }
             })
         },
 

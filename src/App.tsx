@@ -4,15 +4,15 @@ import Copyright from './components/Copyright/Copyright';
 import Summary from './components/Summary/Summary';
 import HCCs from './components/HCCs/HCCs';
 
-import { width_100 } from './utils/WidthUtils';
-import { ClientConfiguration } from './interfaces';
 import { useAppState } from './state';
+import { ClientConfiguration } from './interfaces';
 import MemberTrendTracker from './components/MemberTrendTracker/MemberTrendTracker';
 import InpatientOutpatient from './components/InpatientOutpatient/InpatientOutpatient';
 import Specialists from './components/Specialists/Specialists';
 import Medications from './components/Medications/Medications';
 import SpecialtyBreakdown from './components/SpecialtyBreakdown/SpecialtyBreakdown';
 import SectionFinancial from './components/SectionFinancial/SectionFinancial';
+import { width_100 } from './utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
@@ -47,11 +47,13 @@ export default function App(client: ClientConfiguration): ReactElement {
     const [clientId] = useState(client.clientId);
     const [query] = useState({
         patientId: client.patientId,
-        from: "2020-04-01",
-        to: "2021-03-01"
+        from: "2020-10-01",
+        to: "2021-03-02",
+        source: 'mmr'
     });
     const [financialSummary, setFinancialSummary] = useState({});
     const [hospitalPivot, setHospitalPivot] = useState({});
+    const [memberTrend, setMemberTrend] = useState({});
 
     /**
      * @description Using AppState to get all nested data for components
@@ -59,9 +61,10 @@ export default function App(client: ClientConfiguration): ReactElement {
      */
     const fetchAllata = () => {
         fetchData(query, clientId)
-            .then(({ financialMember, hospPivot }) => {
+            .then(({ financialMember, hospPivot, trend }) => {
                 financialMember.then(({ data }: any) => setFinancialSummary(data));
                 hospPivot.then(({ data }: any) => setHospitalPivot(data));
+                trend.then(({ data }: any) => setMemberTrend(data));
             });
     };
 
@@ -84,7 +87,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                     <Summary summary={financialSummary}/>
                     <HCCs/>
                     <SectionFinancial data={{ financialSummary, hospitalPivot }}/>
-                    <MemberTrendTracker/>
+                    <MemberTrendTracker trend={memberTrend}/>
                     <div className={classes.specialists}>
                         <Specialists/>
                         <InpatientOutpatient/>

@@ -1,5 +1,6 @@
 export interface fetchPivotProps {
     from?: string,
     to?: string,
-    patientId: string
+    patientId: string,
+    source?: string,
 }
