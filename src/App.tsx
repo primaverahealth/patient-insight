@@ -7,12 +7,12 @@ import HCCs from './components/HCCs/HCCs';
 import { width_100 } from './utils/WidthUtils';
 import { ClientConfiguration } from './interfaces';
 import { useAppState } from './state';
-import SectionFinancial from './components/SectionFinancial/SectionFinancial';
 import MemberTrendTracker from './components/MemberTrendTracker/MemberTrendTracker';
 import InpatientOutpatient from './components/InpatientOutpatient/InpatientOutpatient';
 import Specialists from './components/Specialists/Specialists';
 import Medications from './components/Medications/Medications';
 import SpecialtyBreakdown from './components/SpecialtyBreakdown/SpecialtyBreakdown';
+import SectionFinancial from './components/SectionFinancial/SectionFinancial';
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function App(client: ClientConfiguration): ReactElement {
     const classes = useStyles();
     // get from AppState the state of fetching actions
-    const { isFetching, fetchMemberFinancial } = useAppState();
+    const { isFetching, fetchData } = useAppState();
     // react hooks
     const [clientId] = useState(client.clientId);
     const [query] = useState({
@@ -51,22 +51,23 @@ export default function App(client: ClientConfiguration): ReactElement {
         to: "2021-03-01"
     });
     const [financialSummary, setFinancialSummary] = useState({});
+    const [hospitalPivot, setHospitalPivot] = useState({});
 
     /**
-     * @description fetch data using the AppState
+     * @description Using AppState to get all nested data for components
      * @author Frank Corona Prendes <frank.corona@primavera.care>
      */
-    const fetchData = () => {
-        fetchMemberFinancial(query, clientId)
-            .then((response: any) => {
-                // @ts-ignore
-                setFinancialSummary(response.data);
+    const fetchAllata = () => {
+        fetchData(query, clientId)
+            .then(({ financialMember, hospPivot }) => {
+                financialMember.then(({ data }: any) => setFinancialSummary(data));
+                hospPivot.then(({ data }: any) => setHospitalPivot(data));
             });
     };
 
     // using the hook for fech data on mount component
     useEffect(() => {
-        fetchData();
+        fetchAllata()
     }, [query])
 
     return (
@@ -74,22 +75,26 @@ export default function App(client: ClientConfiguration): ReactElement {
             <Backdrop className={classes.backdrop} open={isFetching}>
                 <CircularProgress color="inherit"/>
             </Backdrop>
-            <Box className={classes.box}>
-                <Typography variant='h4' component='h1' gutterBottom>
-                    Patient Insight {client.patientId}!
-                </Typography>
-                <Summary summary={financialSummary}/>
-                <HCCs/>
-                <SectionFinancial/>
-                <MemberTrendTracker/>
-                <div className={classes.specialists}>
-                    <Specialists/>
-                    <InpatientOutpatient/>
-                </div>
-                <Medications/>
-                <SpecialtyBreakdown/>
-                <Copyright/>
-            </Box>
+            {!isFetching &&
+            <>
+                <Box className={classes.box}>
+                    <Typography variant='h4' component='h1' gutterBottom>
+                        Patient Insight {client.patientId}!
+                    </Typography>
+                    <Summary summary={financialSummary}/>
+                    <HCCs/>
+                    <SectionFinancial data={{ financialSummary, hospitalPivot }}/>
+                    <MemberTrendTracker/>
+                    <div className={classes.specialists}>
+                        <Specialists/>
+                        <InpatientOutpatient/>
+                    </div>
+                    <Medications/>
+                    <SpecialtyBreakdown/>
+                    <Copyright/>
+                </Box>
+            </>
+            }
         </Container>
     );
 }
