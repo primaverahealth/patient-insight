@@ -1,6 +1,6 @@
 {
   "name": "@primaverahealth/patient-insight",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "scripts": {
     "start": "node server.js",
     "start:dev": "webpack serve --mode=development",
