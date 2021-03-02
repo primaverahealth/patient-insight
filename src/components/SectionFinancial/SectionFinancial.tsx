@@ -43,13 +43,13 @@ export default function SectionFinancial(props: SectionFinancialProps): ReactEle
         const { financialSummary, hospitalPivot } = props.data;
         return {
             ipAdmits: financialSummary.ipAdmits || 0,
-            totalIpAdmits: sumBy(get(hospitalPivot, 'data.byType'), 'patients') || 0,
+            totalIpAdmits: sumBy(get(hospitalPivot, 'byType'), 'patients') || 0,
             readmissions: financialSummary.readmissions || 0,
-            totalReadmissions: sumBy(filter(get(hospitalPivot, 'data.byType'), { groupBy: 'READMISSION' }), 'patients') || 0,
+            totalReadmissions: sumBy(filter(get(hospitalPivot, 'byType'), { groupBy: 'READMISSION' }), 'patients') || 0,
             // @ts-ignore
             gdr: (!isNil(financialSummary.rxCount) && financialSummary.rxCount !== 0) ? round((financialSummary.rxGeneric / financialSummary.rxCount) * 100, 2) : 0,
             erVisits: financialSummary.er || 0,
-            totalErVisits: sumBy(filter(get(hospitalPivot, 'data.byType'), { groupBy: 'ER' }), 'patients') || 0,
+            totalErVisits: sumBy(filter(get(hospitalPivot, 'byType'), { groupBy: 'ER' }), 'patients') || 0,
             lastMRA: financialSummary.lastMRA || 0,
             lastYearMRA: financialSummary.lastYearMRA || 0,
             mlr: financialSummary.mlr || 0,
