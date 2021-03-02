@@ -1,6 +1,7 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { makeStyles, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import moment from 'moment';
 
 import { width_50 } from '../../utils/WidthUtils';
 import Divider from '../../common/Divider/Divider';
@@ -22,18 +23,20 @@ const useStyles = makeStyles(() => ({
 
 export default function HCCs(): ReactElement {
     const classes = useStyles();
+    const [prevYear] = useState(moment().subtract(1, 'year').format('YYYY'));
+    const [currentYear] = useState(moment().format('YYYY'));
 
     return (
         <div className={classes.root}>
             <Paper className={classes.box}>
                 <Typography variant='h5' component='h1' gutterBottom align="left">
-                    Reported HCCs 2019
+                    Reported HCCs {prevYear}
                 </Typography>
                 <Divider/>
             </Paper>
             <Paper className={classes.box}>
                 <Typography variant='h5' component='h1' gutterBottom align="left">
-                    Reported HCCs 2020
+                    Reported HCCs {currentYear}
                 </Typography>
                 <Divider/>
             </Paper>
