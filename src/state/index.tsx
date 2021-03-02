@@ -78,13 +78,23 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                         'x-tenant': clientId
                     },
                     body: JSON.stringify({ ...params }),
+                }),
+
+                fetch(`https://api.primaverahealthcare.com/rx`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-tenant': clientId
+                    },
+                    body: JSON.stringify({ ...omit(params, ['source']), sortBy: "-paidDate,-paidAmount" }),
                 })
-            ]).then(([pivot, financialMember, hospPivot, trend]) => {
+            ]).then(([pivot, financialMember, hospPivot, trend, medications]) => {
                 return {
                     pivot: pivot.json(),
                     financialMember: financialMember.json(),
                     hospPivot: hospPivot.json(),
-                    trend: trend.json()
+                    trend: trend.json(),
+                    medications: medications.json()
                 }
             })
         },

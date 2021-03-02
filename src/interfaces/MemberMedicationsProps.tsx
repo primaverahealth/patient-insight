@@ -1,0 +1,34 @@
+export interface MedicationsProps {
+    billedAmount: number;
+    center: string;
+    claimDescription: string;
+    claimId: string;
+    claimType: string;
+    copayAmt: number;
+    county: string;
+    date: string;
+    dispFee: number;
+    dos: string;
+    drugFormulary: string;
+    drugName: string;
+    financialClass: string;
+    location: string;
+    month: string;
+    ndc: string;
+    noDays: number
+    npi: string;
+    paidAmount: number;
+    paidDate: string;
+    patientId: string;
+    payorId: string;
+    prescribingName: string;
+    prescribingPhone: string;
+    prescribingSpecialty: string;
+    qty: number;
+    rxNumber: string;
+    snapshot: string;
+    source: string;
+    storeName: string;
+    vendorId: string;
+    vendorName: string;
+}

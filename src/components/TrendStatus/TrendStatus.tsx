@@ -40,13 +40,15 @@ export default function TrendStatus(props: { value: string }): ReactElement {
     return (
         <>
             {Object.is(props.value, 'Status')
-                ? <Typography variant={'caption'} className={classes.typo}>{toTitleCase(props.value)}</Typography>
+                ? <Typography variant={'body2'} className={classes.typo}>{toTitleCase(props.value)}</Typography>
                 : <div className={classes.badgeContainer}>
                     <small className={isActive(props.value)}>
                         &#8226;
                     </small>
                     <span className={classes.span}>
-                        <Typography variant={'caption'} className={classes.typo}>{toTitleCase(props.value)}</Typography>
+                        <Typography variant={'caption'}
+                                    className={classes.typo}>{props.value.toUpperCase()}
+                        </Typography>
                     </span>
                 </div>
             }

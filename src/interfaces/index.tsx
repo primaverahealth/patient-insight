@@ -6,3 +6,4 @@ export * from './ComponentsProps';
 export * from './FinancialMemberResponse';
 export * from './FetchPivotProps';
 export * from './FinancialWidgetsProps';
+export * from './MemberMedicationsProps';

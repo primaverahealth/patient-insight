@@ -54,6 +54,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     const [financialSummary, setFinancialSummary] = useState({});
     const [hospitalPivot, setHospitalPivot] = useState({});
     const [memberTrend, setMemberTrend] = useState([]);
+    const [memberMedications, setMedications] = useState([]);
 
     /**
      * @description Using AppState to get all nested data for components
@@ -61,10 +62,11 @@ export default function App(client: ClientConfiguration): ReactElement {
      */
     const fetchAllata = () => {
         fetchData(query, clientId)
-            .then(({ financialMember, hospPivot, trend }) => {
+            .then(({ financialMember, hospPivot, trend, medications }) => {
                 financialMember.then(({ data }: any) => setFinancialSummary(data));
                 hospPivot.then(({ data }: any) => setHospitalPivot(data));
                 trend.then(({ data }: any) => setMemberTrend(data));
+                medications.then(({ data }: any) => setMedications(data));
             });
     };
 
@@ -102,7 +104,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                         <Specialists/>
                         <InpatientOutpatient/>
                     </div>
-                    <Medications/>
+                    <Medications rxs={memberMedications}/>
                     <SpecialtyBreakdown/>
                     <Copyright/>
                 </Box>
