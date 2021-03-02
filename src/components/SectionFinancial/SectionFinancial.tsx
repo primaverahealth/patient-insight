@@ -71,7 +71,7 @@ export default function SectionFinancial(props: SectionFinancialProps): ReactEle
                     <EFR data={dataSource}/>
                     <MLR data={dataSource}/>
                     <GDR data={dataSource}/>
-                    <Readmissions/>
+                    <Readmissions data={dataSource}/>
                 </div>
             </div>
             }

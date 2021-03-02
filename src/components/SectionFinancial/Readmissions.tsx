@@ -2,17 +2,18 @@ import React, { ReactElement } from 'react';
 import { Paper } from '@material-ui/core';
 
 import { commonStyles } from '../../utils/CommonStyles';
-import { DoubleValuesProps, FinancialFooterProps } from '../../interfaces';
+import { DoubleValuesProps, FinancialFooterProps, FinancialWidgetsProps } from '../../interfaces';
 import DoubleValues from '../../common/DoubleValues/DoubleValues';
 import FinancialFooter from '../../common/FinancialFooter/FinancialFooter';
 
 
-export default function Readmissions(): ReactElement {
+export default function Readmissions(props: { data: FinancialWidgetsProps }): ReactElement {
     const common = commonStyles();
+    const { data } = props;
     const doubleValuesProps: DoubleValuesProps = {
         data: [
-            { value: 0, description: 'Claims' },
-            { value: 0, description: 'ENS' }
+            { value: data.readmissions, description: 'Claims' },
+            { value: data.totalReadmissions, description: 'ENS' }
         ]
     }
     const footerProps: FinancialFooterProps = { data: { name: 'Readmissions' } };
