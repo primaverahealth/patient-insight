@@ -3,16 +3,17 @@ import { Paper } from '@material-ui/core';
 
 import { commonStyles } from '../../utils/CommonStyles';
 import DoubleValues from '../../common/DoubleValues/DoubleValues';
-import { DoubleValuesProps, FinancialFooterProps } from '../../interfaces';
+import { DoubleValuesProps, FinancialFooterProps, FinancialWidgetsProps } from '../../interfaces';
 import FinancialFooter from '../../common/FinancialFooter/FinancialFooter';
 
 
-export default function IPAdmits(): ReactElement {
+export default function IPAdmits(props: { data: FinancialWidgetsProps }): ReactElement {
     const common = commonStyles();
+    const { data } = props;
     const doubleValuesProps: DoubleValuesProps = {
         data: [
-            { value: 1, description: 'Claims' },
-            { value: 1, description: 'ENS' }
+            { value: data.ipAdmits, description: 'Claims' },
+            { value: data.totalIpAdmits, description: 'ENS' }
         ]
     }
     const footerProps: FinancialFooterProps = { data: { name: 'IP Admits' } };
