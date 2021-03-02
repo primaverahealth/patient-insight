@@ -47,7 +47,7 @@ const useStyles = makeStyles(() => ({
 export default function Summary(props: { summary: FinancialMemberResponse }): ReactElement {
     const classes = useStyles();
     // prepare to use AppState
-    const { isFetchingFinancial } = useAppState();
+    const { isFetching } = useAppState();
     // hook for default state of the query params to use
     const [dataSource, setDataSource] = useState([]);
 
@@ -91,8 +91,8 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
             <Typography variant='h5' component='h1' gutterBottom align="left">
                 Summary
             </Typography>
-            {isFetchingFinancial && <LinearProgress/>}
-            {!isFetchingFinancial &&
+            {isFetching && <LinearProgress/>}
+            {!isFetching &&
             <>
                 <Divider/>
                 <TableContainer>
