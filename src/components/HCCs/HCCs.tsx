@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import { width_50 } from '../../utils/WidthUtils';
 import Divider from '../../common/Divider/Divider';
+import NoDataDisplay from '../../common/NoDataDisplay/NoDataDisplay';
 
 const useStyles = makeStyles(() => ({
     box: {
@@ -32,13 +33,15 @@ export default function HCCs(): ReactElement {
                 <Typography variant='h5' component='h1' gutterBottom align="left">
                     Reported HCCs {prevYear}
                 </Typography>
-                <Divider/>
+                <Divider />
+                <NoDataDisplay />
             </Paper>
             <Paper className={classes.box}>
                 <Typography variant='h5' component='h1' gutterBottom align="left">
                     Reported HCCs {currentYear}
                 </Typography>
-                <Divider/>
+                <Divider />
+                <NoDataDisplay />
             </Paper>
         </div>
     );
