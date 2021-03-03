@@ -102,9 +102,9 @@ export default function Medications(props: { rxs: { data: MedicationsProps[], me
             <Typography variant='h5' component='h1' gutterBottom align="left">
                 Medications
             </Typography>
-            <Divider/>
+            <Divider />
             {(isFetching || isFetchingRxs)
-                ? <LinearProgress/>
+                ? <LinearProgress />
                 : <>
                     <TableContainer>
                         <Table className={classes.table} size="medium" aria-label="medications table">
@@ -123,14 +123,15 @@ export default function Medications(props: { rxs: { data: MedicationsProps[], me
                                     <TableRow key={index}>
                                         <TableCell align="left">
                                             <Typography variant={'body2'}
-                                                        className={classes.action}>{row.drugName}</Typography>
+                                                className={classes.action}>{row.drugName}</Typography>
                                         </TableCell>
                                         <TableCell align="right">
-                                            <NumberFormat value={row.paidAmount}
-                                                          displayType={'text'}
-                                                          thousandSeparator={true}
-                                                          decimalScale={2}
-                                                          prefix={'$'}/>
+                                            <NumberFormat
+                                                value={row.paidAmount}
+                                                displayType={'text'}
+                                                thousandSeparator={true}
+                                                decimalScale={2}
+                                                prefix={'$'} />
                                         </TableCell>
                                         <TableCell align="right">
                                             <Typography variant={'body2'}>{row.qty}</Typography>
@@ -149,16 +150,16 @@ export default function Medications(props: { rxs: { data: MedicationsProps[], me
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    {!isEmpty(meta) &&
-                    <TablePagination
-                        rowsPerPageOptions={[10]}
-                        component="div"
-                        count={meta.count}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onChangePage={handleChangePage}
-                        onChangeRowsPerPage={handleChangeRowsPerPage}
-                    />
+                    {(!isEmpty(meta) && meta.count >= 10) &&
+                        <TablePagination
+                            rowsPerPageOptions={[10]}
+                            component="div"
+                            count={meta.count}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onChangePage={handleChangePage}
+                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
                     }
                 </>
             }

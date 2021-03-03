@@ -155,7 +155,7 @@ export default function Specialists(props: { specialists: { data: ClaimsProps[],
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    {!isEmpty(meta) &&
+                    {(!isEmpty(meta) && meta.count >= 10) &&
                         <TablePagination
                             rowsPerPageOptions={[10]}
                             component="div"
