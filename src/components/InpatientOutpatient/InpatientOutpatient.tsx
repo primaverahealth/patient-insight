@@ -48,15 +48,15 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
      */
     const mappedInformation = (data: ClaimsProps[]) => {
         return data.map(({
-                             provName,
-                             speciality,
-                             diagnoses,
-                             dateService,
-                             paidAmount,
-                             claimId,
-                             claimType,
-                             primaryDiagnosis
-                         }) => {
+            provName,
+            speciality,
+            diagnoses,
+            dateService,
+            paidAmount,
+            claimId,
+            claimType,
+            primaryDiagnosis
+        }) => {
             // String: Primary  diagnose code - primary diagnose description.
             primaryDiagnosis = `${primaryDiagnosis.code} ${(!Object.is(primaryDiagnosis.description, '')) ? ` - ${primaryDiagnosis.description}` : ``}  `;
 
@@ -75,6 +75,13 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
     }
 
     /**
+     * @description Calculate de possible box height based on rows
+     * @param {number} rows
+     * @author Frank Corona Prendes <frank.corona@primavera,care>
+     */
+    const getBoxHeight = (rows: number) => (rows < 10) ? rows * 115 : 683;
+
+    /**
      * @description Handle pagination events
      * @param {any} event
      * @param {number} newPage
@@ -87,7 +94,8 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
                 setDataSource(mappedInformation(response.data));
                 setMeta(response.meta);
                 setPage(newPage);
-                setBoxHeight(response.data.length * 115);
+                const newBoxHeight = getBoxHeight(response.data.length);
+                setBoxHeight(newBoxHeight);
             })
     };
 
@@ -107,7 +115,8 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
         setDataSource(mappedInformation(props.inpatient.data));
         // @ts-ignore
         setMeta(props.inpatient.meta);
-        setBoxHeight(props.inpatient.data.length * 115);
+        const newBoxHeight = getBoxHeight(props.inpatient.data.length);
+        setBoxHeight(newBoxHeight);
     }, [props.inpatient])
 
 
@@ -116,9 +125,9 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
             <Typography variant='h5' component='h1' gutterBottom align="left">
                 Inpatient/Outpatient
             </Typography>
-            <Divider/>
+            <Divider />
             {(isFetching || isFetchingInpatient)
-                ? <LinearProgress/>
+                ? <LinearProgress />
                 : <>
                     <TableContainer>
                         <Table className={classes.table} size="medium" aria-label="medications table">
@@ -140,11 +149,12 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
                                             <Typography variant={'body2'}>{row.dateService}</Typography>
                                         </TableCell>
                                         <TableCell align="right">
-                                            <NumberFormat value={row.paidAmount}
-                                                          displayType={'text'}
-                                                          thousandSeparator={true}
-                                                          decimalScale={2}
-                                                          prefix={'$'}/>
+                                            <NumberFormat
+                                                value={row.paidAmount}
+                                                displayType={'text'}
+                                                thousandSeparator={true}
+                                                decimalScale={2}
+                                                prefix={'$'} />
                                         </TableCell>
                                         <TableCell align="left">
                                             <Typography variant={'body2'}>{row.primaryDiagnosis}</Typography>
@@ -155,15 +165,15 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
                         </Table>
                     </TableContainer>
                     {(!isEmpty(meta) && meta.count >= 10) &&
-                    <TablePagination
-                        rowsPerPageOptions={[10]}
-                        component="div"
-                        count={meta.count}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onChangePage={handleChangePage}
-                        onChangeRowsPerPage={handleChangeRowsPerPage}
-                    />
+                        <TablePagination
+                            rowsPerPageOptions={[10]}
+                            component="div"
+                            count={meta.count}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onChangePage={handleChangePage}
+                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
                     }
                 </>
             }
