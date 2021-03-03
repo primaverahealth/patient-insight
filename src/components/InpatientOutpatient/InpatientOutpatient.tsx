@@ -16,7 +16,7 @@ import { isEmpty } from 'lodash';
 import NumberFormat from 'react-number-format';
 
 import { useAppState } from '../../state';
-import { width_100 } from '../../utils';
+import { width_100, height_100 } from '../../utils';
 import { ClaimsProps, MetaProps } from '../../interfaces';
 import Divider from '../../common/Divider/Divider';
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
     box: {
         padding: '12px',
         boxShadow: '0 3px 5px 0 rgb(0 0 0 / 10%)',
-        height: 683,
+        height: height_100,
         margin: '12px 4px'
     },
     table: {
@@ -40,7 +40,6 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [meta, setMeta] = React.useState({ count: 0, limit: 10, page: 1 });
-    const [boxHeight, setBoxHeight] = React.useState(0);
     /**
      * @description Mapping data to represent information.
      * @param {ClaimsProps[]} data
@@ -75,13 +74,6 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
     }
 
     /**
-     * @description Calculate de possible box height based on rows
-     * @param {number} rows
-     * @author Frank Corona Prendes <frank.corona@primavera,care>
-     */
-    const getBoxHeight = (rows: number) => (rows < 10) ? rows * 115 : 683;
-
-    /**
      * @description Handle pagination events
      * @param {any} event
      * @param {number} newPage
@@ -94,8 +86,6 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
                 setDataSource(mappedInformation(response.data));
                 setMeta(response.meta);
                 setPage(newPage);
-                const newBoxHeight = getBoxHeight(response.data.length);
-                setBoxHeight(newBoxHeight);
             })
     };
 
@@ -115,13 +105,11 @@ export default function InpatientOutpatient(props: { inpatient: { data: ClaimsPr
         setDataSource(mappedInformation(props.inpatient.data));
         // @ts-ignore
         setMeta(props.inpatient.meta);
-        const newBoxHeight = getBoxHeight(props.inpatient.data.length);
-        setBoxHeight(newBoxHeight);
     }, [props.inpatient])
 
 
     return (
-        <Paper className={classes.box} style={{ height: boxHeight }}>
+        <Paper className={classes.box}>
             <Typography variant='h5' component='h1' gutterBottom align="left">
                 Inpatient/Outpatient
             </Typography>

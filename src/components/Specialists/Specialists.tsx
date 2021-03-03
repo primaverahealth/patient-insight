@@ -16,7 +16,7 @@ import { isEmpty } from 'lodash';
 import NumberFormat from 'react-number-format';
 
 import { useAppState } from '../../state';
-import { width_100 } from '../../utils';
+import { width_100, height_100 } from '../../utils';
 import { ClaimsProps, MetaProps } from '../../interfaces';
 import Divider from '../../common/Divider/Divider';
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
     box: {
         padding: '12px',
         boxShadow: '0 3px 5px 0 rgb(0 0 0 / 10%)',
-        height: 683,
+        height: height_100,
         margin: '12px 4px',
     },
     table: {
@@ -48,16 +48,16 @@ export default function Specialists(props: { specialists: { data: ClaimsProps[],
      */
     const mappedInformation = (data: ClaimsProps[]) => {
         return data.map(({
-                             provName,
-                             speciality,
-                             diagnoses,
-                             dateService,
-                             paidAmount,
-                             claimId,
-                             claimType,
-                             primaryDiagnosis,
-                             claimDescription
-                         }) => {
+            provName,
+            speciality,
+            diagnoses,
+            dateService,
+            paidAmount,
+            claimId,
+            claimType,
+            primaryDiagnosis,
+            claimDescription
+        }) => {
             // String: Primary  diagnose code - primary diagnose description.
             primaryDiagnosis = `${primaryDiagnosis.code} ${(!Object.is(primaryDiagnosis.description, '')) ? ` - ${primaryDiagnosis.description}` : ``}  `;
             // In case of Specialty be 'UNKNOWN' then use claimDescription instead.
@@ -116,9 +116,9 @@ export default function Specialists(props: { specialists: { data: ClaimsProps[],
             <Typography variant='h5' component='h1' gutterBottom align="left">
                 Specialists
             </Typography>
-            <Divider/>
+            <Divider />
             {(isFetching || isFetchingClaims)
-                ? <LinearProgress/>
+                ? <LinearProgress />
                 : <>
                     <TableContainer>
                         <Table className={classes.table} size="medium" aria-label="specialists claim table">
@@ -140,11 +140,12 @@ export default function Specialists(props: { specialists: { data: ClaimsProps[],
                                             <Typography variant={'body2'}>{row.dateService}</Typography>
                                         </TableCell>
                                         <TableCell align="right">
-                                            <NumberFormat value={row.paidAmount}
-                                                          displayType={'text'}
-                                                          thousandSeparator={true}
-                                                          decimalScale={2}
-                                                          prefix={'$'}/>
+                                            <NumberFormat
+                                                value={row.paidAmount}
+                                                displayType={'text'}
+                                                thousandSeparator={true}
+                                                decimalScale={2}
+                                                prefix={'$'} />
                                         </TableCell>
                                         <TableCell align="left">
                                             <Typography variant={'body2'}>{row.primaryDiagnosis}</Typography>
@@ -155,15 +156,15 @@ export default function Specialists(props: { specialists: { data: ClaimsProps[],
                         </Table>
                     </TableContainer>
                     {!isEmpty(meta) &&
-                    <TablePagination
-                        rowsPerPageOptions={[10]}
-                        component="div"
-                        count={meta.count}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onChangePage={handleChangePage}
-                        onChangeRowsPerPage={handleChangeRowsPerPage}
-                    />
+                        <TablePagination
+                            rowsPerPageOptions={[10]}
+                            component="div"
+                            count={meta.count}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onChangePage={handleChangePage}
+                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
                     }
                 </>
             }
