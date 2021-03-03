@@ -8,3 +8,4 @@ export * from './FetchPivotProps';
 export * from './FinancialWidgetsProps';
 export * from './MemberMedicationsProps';
 export * from './MetaProps';
+export * from './ClaimsProps';

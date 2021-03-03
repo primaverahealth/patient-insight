@@ -55,6 +55,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     const [hospitalPivot, setHospitalPivot] = React.useState({});
     const [memberTrend, setMemberTrend] = React.useState([]);
     const [memberMedications, setMedications] = React.useState({ data: [], meta: {} });
+    const [claimsSpecialists, setClaimsSpecialists] = React.useState({ data: [], meta: {} });
 
     /**
      * @description Using AppState to get all nested data for components
@@ -62,11 +63,12 @@ export default function App(client: ClientConfiguration): ReactElement {
      */
     const fetchAllata = () => {
         fetchData(query, clientId)
-            .then(({ financialMember, hospPivot, trend, medications }) => {
+            .then(({ financialMember, hospPivot, trend, medications, specialists }) => {
                 financialMember.then(({ data }: any) => setFinancialSummary(data));
                 hospPivot.then(({ data }: any) => setHospitalPivot(data));
                 trend.then(({ data }: any) => setMemberTrend(data));
                 medications.then((response: any) => setMedications(response));
+                specialists.then((response: any) => setClaimsSpecialists(response));
             });
     };
 
@@ -100,10 +102,8 @@ export default function App(client: ClientConfiguration): ReactElement {
                     <HCCs/>
                     <SectionFinancial data={{ financialSummary, hospitalPivot }}/>
                     <MemberTrendTracker trend={memberTrend} toggleSource={toggleSource}/>
-                    <div className={classes.specialists}>
-                        <Specialists/>
-                        <InpatientOutpatient/>
-                    </div>
+                    <Specialists specialists={claimsSpecialists} query={query} clientId={clientId}/>
+                    <InpatientOutpatient/>
                     <Medications rxs={memberMedications} query={query} clientId={clientId}/>
                     <SpecialtyBreakdown/>
                     <Copyright/>
