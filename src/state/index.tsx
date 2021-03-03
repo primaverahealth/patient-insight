@@ -9,6 +9,8 @@ export interface StateContextType {
     isFetching: boolean,
     isFetchingTrend: boolean,
     isFetchingRxs: boolean,
+    isFetchingClaims: boolean,
+    isFetchingInpatient: boolean,
 
     setError(error: Error | null): void;
 
@@ -19,6 +21,8 @@ export interface StateContextType {
     fetchRxs(params: fetchProps, clientId: string): Promise<any>;
 
     fetchSpecialists(params: fetchProps, clientId: string): Promise<any>;
+
+    fetchInpatient(params: fetchProps, clientId: string): Promise<any>;
 }
 
 export const StateContext = createContext<StateContextType>(null!);
@@ -28,6 +32,8 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
     const [isFetching, setIsFetching] = React.useState(false);
     const [isFetchingTrend, setIsFetchingTrend] = React.useState(false);
     const [isFetchingRxs, setIsFetchingRxs] = React.useState(false);
+    const [isFetchingClaims, setIsFetchingClaims] = React.useState(false);
+    const [isFetchingInpatient, setIsFetchingInpatient] = React.useState(false);
 
     let contextValue = {
         error,
@@ -35,6 +41,8 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
         isFetching,
         isFetchingTrend,
         isFetchingRxs,
+        isFetchingClaims,
+        isFetchingInpatient,
     } as StateContextType;
 
     contextValue = {
@@ -114,8 +122,23 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                         page: 1,
                         ...omit(params, ['source']),
                     }),
+                }),
+
+                fetch(`https://api.primaverahealthcare.com/claims`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-tenant': clientId
+                    },
+                    body: JSON.stringify({
+                        sortBy: "-paidAmount,-dateService",
+                        claimType: "INPATIENT,OUTPATIENT",
+                        limit: 10,
+                        page: 1,
+                        ...omit(params, ['source']),
+                    }),
                 })
-            ]).then(([pivot, financialMember, hospPivot, trend, medications, specialists]) => {
+            ]).then(([pivot, financialMember, hospPivot, trend, medications, specialists, inpatient]) => {
                 return {
                     pivot: pivot.json(),
                     financialMember: financialMember.json(),
@@ -123,6 +146,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                     trend: trend.json(),
                     medications: medications.json(),
                     specialists: specialists.json(),
+                    inpatient: inpatient.json(),
                 }
             })
         },
@@ -164,6 +188,23 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                 body: JSON.stringify({
                     sortBy: "-paidAmount,-dateService",
                     claimType: "PROFESSIONAL",
+                    limit: 10,
+                    page: 1,
+                    ...omit(params, ['source']),
+                }),
+            }).then(response => response.json());
+        },
+
+        fetchInpatient: async (params: fetchProps, clientId: string) => {
+            return fetch(`https://api.primaverahealthcare.com/claims`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'x-tenant': clientId
+                },
+                body: JSON.stringify({
+                    sortBy: "-paidAmount,-dateService",
+                    claimType: "INPATIENT,OUTPATIENT",
                     limit: 10,
                     page: 1,
                     ...omit(params, ['source']),
@@ -221,17 +262,33 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
     };
 
     const fetchSpecialists: StateContextType['fetchSpecialists'] = (params: fetchProps, clientId: string) => {
-        setIsFetchingRxs(true);
+        setIsFetchingClaims(true);
         return contextValue
             .fetchSpecialists(params, clientId)
             .then(res => {
-                setIsFetchingRxs(false);
+                setIsFetchingClaims(false);
                 return res;
             })
             .then(data => data)
             .catch(err => {
                 setError(err);
-                setIsFetchingRxs(false);
+                setIsFetchingClaims(false);
+                return Promise.reject(err);
+            });
+    };
+
+    const fetchInpatient: StateContextType['fetchInpatient'] = (params: fetchProps, clientId: string) => {
+        setIsFetchingInpatient(true);
+        return contextValue
+            .fetchInpatient(params, clientId)
+            .then(res => {
+                setIsFetchingInpatient(false);
+                return res;
+            })
+            .then(data => data)
+            .catch(err => {
+                setError(err);
+                setIsFetchingInpatient(false);
                 return Promise.reject(err);
             });
     };
@@ -243,6 +300,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
             fetchTrend,
             fetchRxs,
             fetchSpecialists,
+            fetchInpatient,
         }}>{props.children}
     </StateContext.Provider>;
 }

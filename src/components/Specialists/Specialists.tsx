@@ -12,13 +12,13 @@ import {
     TableRow
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import { isEmpty } from 'lodash';
+import NumberFormat from 'react-number-format';
 
 import { useAppState } from '../../state';
 import { width_100 } from '../../utils';
 import { ClaimsProps, MetaProps } from '../../interfaces';
 import Divider from '../../common/Divider/Divider';
-import NumberFormat from 'react-number-format';
-import { isEmpty } from 'lodash';
 
 const useStyles = makeStyles(() => ({
     box: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
 
 export default function Specialists(props: { specialists: { data: ClaimsProps[], meta: MetaProps }, query: any, clientId: string }): ReactElement {
     const classes = useStyles();
-    const { isFetching, isFetchingRxs, fetchSpecialists } = useAppState();
+    const { isFetching, isFetchingClaims, fetchSpecialists } = useAppState();
     // hook for default state of the query params to use
     const [dataSource, setDataSource] = React.useState([]);
     const [page, setPage] = React.useState(0);
@@ -117,7 +117,7 @@ export default function Specialists(props: { specialists: { data: ClaimsProps[],
                 Specialists
             </Typography>
             <Divider/>
-            {(isFetching || isFetchingRxs)
+            {(isFetching || isFetchingClaims)
                 ? <LinearProgress/>
                 : <>
                     <TableContainer>

@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => ({
 
 export default function Medications(props: { rxs: { data: MedicationsProps[], meta: MetaProps }, query: any, clientId: string }): ReactElement {
     const classes = useStyles();
-    const { isFetching, fetchRxs } = useAppState();
+    const { isFetching, isFetchingRxs, fetchRxs } = useAppState();
     // hook for default state of the query params to use
     const [dataSource, setDataSource] = React.useState([]);
     const [page, setPage] = React.useState(0);
@@ -103,7 +103,7 @@ export default function Medications(props: { rxs: { data: MedicationsProps[], me
                 Medications
             </Typography>
             <Divider/>
-            {(isFetching)
+            {(isFetching || isFetchingRxs)
                 ? <LinearProgress/>
                 : <>
                     <TableContainer>

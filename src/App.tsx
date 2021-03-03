@@ -56,6 +56,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     const [memberTrend, setMemberTrend] = React.useState([]);
     const [memberMedications, setMedications] = React.useState({ data: [], meta: {} });
     const [claimsSpecialists, setClaimsSpecialists] = React.useState({ data: [], meta: {} });
+    const [claimsInpatient, setClaimsInpatient] = React.useState({ data: [], meta: {} });
 
     /**
      * @description Using AppState to get all nested data for components
@@ -63,12 +64,13 @@ export default function App(client: ClientConfiguration): ReactElement {
      */
     const fetchAllata = () => {
         fetchData(query, clientId)
-            .then(({ financialMember, hospPivot, trend, medications, specialists }) => {
+            .then(({ financialMember, hospPivot, trend, medications, specialists, inpatient }) => {
                 financialMember.then(({ data }: any) => setFinancialSummary(data));
                 hospPivot.then(({ data }: any) => setHospitalPivot(data));
                 trend.then(({ data }: any) => setMemberTrend(data));
                 medications.then((response: any) => setMedications(response));
                 specialists.then((response: any) => setClaimsSpecialists(response));
+                inpatient.then((response: any) => setClaimsInpatient(response));
             });
     };
 
@@ -103,7 +105,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                     <SectionFinancial data={{ financialSummary, hospitalPivot }}/>
                     <MemberTrendTracker trend={memberTrend} toggleSource={toggleSource}/>
                     <Specialists specialists={claimsSpecialists} query={query} clientId={clientId}/>
-                    <InpatientOutpatient/>
+                    <InpatientOutpatient inpatient={claimsInpatient} query={query} clientId={clientId}/>
                     <Medications rxs={memberMedications} query={query} clientId={clientId}/>
                     <SpecialtyBreakdown/>
                     <Copyright/>
