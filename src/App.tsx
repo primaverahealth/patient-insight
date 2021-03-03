@@ -57,7 +57,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     const [memberMedications, setMedications] = React.useState({ data: [], meta: {} });
     const [claimsSpecialists, setClaimsSpecialists] = React.useState({ data: [], meta: {} });
     const [claimsInpatient, setClaimsInpatient] = React.useState({ data: [], meta: {} });
-    const [hcc, setHCCs] = React.useState([]);
+    const [hccCodes, setHCCs] = React.useState([]);
 
     /**
      * @description Using AppState to get all nested data for components
@@ -65,14 +65,14 @@ export default function App(client: ClientConfiguration): ReactElement {
      */
     const fetchAllata = () => {
         fetchData(query, clientId)
-            .then(({ financialMember, hospPivot, trend, medications, specialists, inpatient, hccCodes }) => {
+            .then(({ financialMember, hospPivot, trend, medications, specialists, inpatient, hcc }) => {
                 financialMember.then(({ data }: any) => setFinancialSummary(data));
                 hospPivot.then(({ data }: any) => setHospitalPivot(data));
                 trend.then(({ data }: any) => setMemberTrend(data));
                 medications.then((response: any) => setMedications(response));
                 specialists.then((response: any) => setClaimsSpecialists(response));
                 inpatient.then((response: any) => setClaimsInpatient(response));
-                hccCodes.then(({ data }: any) => setHCCs(data));
+                hcc.then(({ data }: any) => setHCCs(data));
             });
     };
 
@@ -103,7 +103,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                             Patient Insight {client.patientId}!
                     </Typography>
                         <Summary summary={financialSummary} />
-                        <HCCs hccCodes={hcc} />
+                        <HCCs hccCodes={hccCodes} />
                         <SectionFinancial data={{ financialSummary, hospitalPivot }} />
                         <MemberTrendTracker trend={memberTrend} toggleSource={toggleSource} />
                         <Specialists specialists={claimsSpecialists} query={query} clientId={clientId} />
