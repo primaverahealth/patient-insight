@@ -86,7 +86,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                         'content-type': 'application/json',
                         'x-tenant': clientId
                     },
-                    body: JSON.stringify({ ...omit(params, ['source']), sortBy: "-paidDate,-paidAmount" }),
+                    body: JSON.stringify({ ...omit(params, ['source']), sortBy: "-paidDate,-paidAmount", limit: 50 }),
                 })
             ]).then(([pivot, financialMember, hospPivot, trend, medications]) => {
                 return {

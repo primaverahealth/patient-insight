@@ -13,11 +13,11 @@ import {
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { isNil } from 'lodash';
+import NumberFormat from 'react-number-format';
 
 import Divider from '../../common/Divider/Divider';
 import { MedicationsProps } from '../../interfaces';
 import { useAppState } from '../../state';
-import NumberFormat from 'react-number-format';
 import { width_100 } from '../../utils';
 
 const useStyles = makeStyles(() => ({
@@ -98,7 +98,7 @@ export default function Medications(props: { rxs: MedicationsProps[] }): ReactEl
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {dataSource.map((row: MedicationsProps, index: number) => (
+                                {dataSource.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: MedicationsProps, index: number) => (
                                     <TableRow key={index}>
                                         <TableCell align="left">
                                             <Typography variant={'body2'}
@@ -129,7 +129,7 @@ export default function Medications(props: { rxs: MedicationsProps[] }): ReactEl
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        rowsPerPageOptions={[10, 25, 100]}
+                        rowsPerPageOptions={[10]}
                         component="div"
                         count={dataSource.length}
                         rowsPerPage={rowsPerPage}
