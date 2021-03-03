@@ -18,13 +18,13 @@ import NumberFormat from 'react-number-format';
 import Divider from '../../common/Divider/Divider';
 import { MedicationsProps, MetaProps } from '../../interfaces';
 import { useAppState } from '../../state';
-import { width_100 } from '../../utils';
+import { width_100, height_100 } from '../../utils';
 
 const useStyles = makeStyles(() => ({
     box: {
         padding: '12px',
         boxShadow: '0 3px 5px 0 rgb(0 0 0 / 10%)',
-        height: 683,
+        height: height_100,
         margin: '12px 4px'
     },
     table: {

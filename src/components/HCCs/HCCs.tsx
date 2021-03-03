@@ -3,7 +3,7 @@ import { List, ListItem, ListItemText, makeStyles, Paper } from '@material-ui/co
 import Typography from '@material-ui/core/Typography';
 import { takeRight, map, toInteger, each, isNil, find, isEmpty, orderBy } from 'lodash';
 
-import { width_50 } from '../../utils/WidthUtils';
+import { width_50, height_100 } from '../../utils';
 import Divider from '../../common/Divider/Divider';
 import NoDataDisplay from '../../common/NoDataDisplay/NoDataDisplay';
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
     box: {
         padding: '12px',
         boxShadow: '0 3px 5px 0 rgb(0 0 0 / 10%)',
-        height: 350,
+        height: height_100,
         margin: '12px 4px',
         width: width_50,
     },
@@ -40,7 +40,6 @@ const useStyles = makeStyles(() => ({
 export default function HCCs(props: { hccCodes: HccProps[] }): ReactElement {
     const classes = useStyles();
     const [dataSource, setDataSource] = React.useState([]);
-    const [boxHeight, setBoxHeight] = React.useState(0);
 
     /**
      * @description Aux function to get if a HCC code already exist
@@ -93,13 +92,6 @@ export default function HCCs(props: { hccCodes: HccProps[] }): ReactElement {
             ];
         }
 
-        // trick to calculate dymanically the height of the boxes based on the highest length
-        const values = map(dataResponse, 'hccCodes');
-        const lengths = values.map(a => a.length);
-        const max = Math.max(...lengths);
-        const newBoxHeight = max * 60;
-        setBoxHeight(newBoxHeight);
-
         return dataResponse;
     }
 
@@ -112,7 +104,7 @@ export default function HCCs(props: { hccCodes: HccProps[] }): ReactElement {
     return (
         <div className={classes.root}>
             {dataSource.map((item: HccCodesProps, index: number) => (
-                <Paper className={classes.box} key={index} style={{ height: boxHeight }}>
+                <Paper className={classes.box} key={index}>
                     <Typography variant='h5' component='h1' gutterBottom align="left">
                         Reported HCCs {item.year}
                     </Typography>
