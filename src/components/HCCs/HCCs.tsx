@@ -7,6 +7,11 @@ import { width_50 } from '../../utils/WidthUtils';
 import Divider from '../../common/Divider/Divider';
 import NoDataDisplay from '../../common/NoDataDisplay/NoDataDisplay';
 
+export interface HccProps {
+    year: string,
+    hccCodes: any[]
+}
+
 const useStyles = makeStyles(() => ({
     box: {
         padding: '12px',
@@ -22,7 +27,7 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export default function HCCs(): ReactElement {
+export default function HCCs(props: { hccCodes: HccProps[] }): ReactElement {
     const classes = useStyles();
     const [prevYear] = React.useState(moment().subtract(1, 'year').format('YYYY'));
     const [currentYear] = React.useState(moment().format('YYYY'));

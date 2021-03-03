@@ -57,6 +57,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     const [memberMedications, setMedications] = React.useState({ data: [], meta: {} });
     const [claimsSpecialists, setClaimsSpecialists] = React.useState({ data: [], meta: {} });
     const [claimsInpatient, setClaimsInpatient] = React.useState({ data: [], meta: {} });
+    const [hcc, setHCCs] = React.useState([]);
 
     /**
      * @description Using AppState to get all nested data for components
@@ -64,13 +65,14 @@ export default function App(client: ClientConfiguration): ReactElement {
      */
     const fetchAllata = () => {
         fetchData(query, clientId)
-            .then(({ financialMember, hospPivot, trend, medications, specialists, inpatient }) => {
+            .then(({ financialMember, hospPivot, trend, medications, specialists, inpatient, hccCodes }) => {
                 financialMember.then(({ data }: any) => setFinancialSummary(data));
                 hospPivot.then(({ data }: any) => setHospitalPivot(data));
                 trend.then(({ data }: any) => setMemberTrend(data));
                 medications.then((response: any) => setMedications(response));
                 specialists.then((response: any) => setClaimsSpecialists(response));
                 inpatient.then((response: any) => setClaimsInpatient(response));
+                hccCodes.then(({ data }: any) => setHCCs(data));
             });
     };
 
@@ -92,25 +94,25 @@ export default function App(client: ClientConfiguration): ReactElement {
     return (
         <Container className={classes.container}>
             <Backdrop className={classes.backdrop} open={isFetching}>
-                <CircularProgress color="inherit"/>
+                <CircularProgress color="inherit" />
             </Backdrop>
             {!isFetching &&
-            <>
-                <Box className={classes.box}>
-                    <Typography variant='h4' component='h1' gutterBottom>
-                        Patient Insight {client.patientId}!
+                <>
+                    <Box className={classes.box}>
+                        <Typography variant='h4' component='h1' gutterBottom>
+                            Patient Insight {client.patientId}!
                     </Typography>
-                    <Summary summary={financialSummary}/>
-                    <HCCs/>
-                    <SectionFinancial data={{ financialSummary, hospitalPivot }}/>
-                    <MemberTrendTracker trend={memberTrend} toggleSource={toggleSource}/>
-                    <Specialists specialists={claimsSpecialists} query={query} clientId={clientId}/>
-                    <InpatientOutpatient inpatient={claimsInpatient} query={query} clientId={clientId}/>
-                    <Medications rxs={memberMedications} query={query} clientId={clientId}/>
-                    <SpecialtyBreakdown/>
-                    <Copyright/>
-                </Box>
-            </>
+                        <Summary summary={financialSummary} />
+                        <HCCs hccCodes={hcc} />
+                        <SectionFinancial data={{ financialSummary, hospitalPivot }} />
+                        <MemberTrendTracker trend={memberTrend} toggleSource={toggleSource} />
+                        <Specialists specialists={claimsSpecialists} query={query} clientId={clientId} />
+                        <InpatientOutpatient inpatient={claimsInpatient} query={query} clientId={clientId} />
+                        <Medications rxs={memberMedications} query={query} clientId={clientId} />
+                        <SpecialtyBreakdown />
+                        <Copyright />
+                    </Box>
+                </>
             }
         </Container>
     );

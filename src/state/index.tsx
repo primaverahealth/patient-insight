@@ -137,8 +137,17 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                         page: 1,
                         ...omit(params, ['source']),
                     }),
+                }),
+
+                fetch(`https://api.primaverahealthcare.com/hcc/${params.patientId}`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-tenant': clientId
+                    },
+                    body: JSON.stringify({}),
                 })
-            ]).then(([pivot, financialMember, hospPivot, trend, medications, specialists, inpatient]) => {
+            ]).then(([pivot, financialMember, hospPivot, trend, medications, specialists, inpatient, hcc]) => {
                 return {
                     pivot: pivot.json(),
                     financialMember: financialMember.json(),
@@ -147,6 +156,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                     medications: medications.json(),
                     specialists: specialists.json(),
                     inpatient: inpatient.json(),
+                    hcc: hcc.json(),
                 }
             })
         },
