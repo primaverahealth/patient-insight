@@ -54,7 +54,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     const [financialSummary, setFinancialSummary] = React.useState({});
     const [hospitalPivot, setHospitalPivot] = React.useState({});
     const [memberTrend, setMemberTrend] = React.useState([]);
-    const [memberMedications, setMedications] = React.useState([]);
+    const [memberMedications, setMedications] = React.useState({ data: [], meta: {} });
 
     /**
      * @description Using AppState to get all nested data for components
@@ -66,7 +66,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                 financialMember.then(({ data }: any) => setFinancialSummary(data));
                 hospPivot.then(({ data }: any) => setHospitalPivot(data));
                 trend.then(({ data }: any) => setMemberTrend(data));
-                medications.then(({ data }: any) => setMedications(data));
+                medications.then((response: any) => setMedications(response));
             });
     };
 
@@ -77,12 +77,12 @@ export default function App(client: ClientConfiguration): ReactElement {
      */
     const toggleSource = (source: string) => {
         fetchTrend({ ...query, source }, clientId)
-            .then((response: any) => setMemberTrend(response.data))
+            .then((response) => setMemberTrend(response.data))
     }
 
     // using the hook for fech data on mount component
     useEffect(() => {
-        fetchAllata()
+        fetchAllata();
     }, [query])
 
     return (
@@ -104,7 +104,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                         <Specialists/>
                         <InpatientOutpatient/>
                     </div>
-                    <Medications rxs={memberMedications}/>
+                    <Medications rxs={memberMedications} query={query} clientId={clientId}/>
                     <SpecialtyBreakdown/>
                     <Copyright/>
                 </Box>

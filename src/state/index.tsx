@@ -1,19 +1,22 @@
 import React, { createContext, useContext } from 'react';
 import { omit } from 'lodash';
 
-import { fetchPivotProps } from '../interfaces';
+import { fetchProps } from '../interfaces';
 
 
 export interface StateContextType {
     error: Error | null;
     isFetching: boolean,
     isFetchingTrend: boolean,
+    isFetchingRxs: boolean,
 
     setError(error: Error | null): void;
 
-    fetchData(params: fetchPivotProps, clientId: string): Promise<any>;
+    fetchData(params: fetchProps, clientId: string): Promise<any>;
 
-    fetchTrend(params: fetchPivotProps, clientId: string): Promise<any>;
+    fetchTrend(params: fetchProps, clientId: string): Promise<any>;
+
+    fetchRxs(params: fetchProps, clientId: string): Promise<any>;
 }
 
 export const StateContext = createContext<StateContextType>(null!);
@@ -22,12 +25,14 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
     const [error, setError] = React.useState<Error | null>(null);
     const [isFetching, setIsFetching] = React.useState(false);
     const [isFetchingTrend, setIsFetchingTrend] = React.useState(false);
+    const [isFetchingRxs, setIsFetchingRxs] = React.useState(false);
 
     let contextValue = {
         error,
         setError,
         isFetching,
         isFetchingTrend,
+        isFetchingRxs,
     } as StateContextType;
 
     contextValue = {
@@ -39,7 +44,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
          * @param clientId
          * @author Frank Corona Prendes <frank.corona@primavera.care>
          */
-        fetchData: async (params: fetchPivotProps, clientId: string) => {
+        fetchData: async (params: fetchProps, clientId: string) => {
             return Promise.all([
                 fetch(`https://api.primaverahealthcare.com/financial-summary-detail/pivot`, {
                     method: 'POST',
@@ -86,7 +91,12 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                         'content-type': 'application/json',
                         'x-tenant': clientId
                     },
-                    body: JSON.stringify({ ...omit(params, ['source']), sortBy: "-paidDate,-paidAmount", limit: 50 }),
+                    body: JSON.stringify({
+                        sortBy: "-paidDate,-paidAmount",
+                        limit: 10,
+                        page: 1,
+                        ...omit(params, ['source']),
+                    }),
                 })
             ]).then(([pivot, financialMember, hospPivot, trend, medications]) => {
                 return {
@@ -99,7 +109,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
             })
         },
 
-        fetchTrend: async (params: fetchPivotProps, clientId: string) => {
+        fetchTrend: async (params: fetchProps, clientId: string) => {
             return fetch(`https://api.primaverahealthcare.com/members/trend`, {
                 method: 'POST',
                 headers: {
@@ -109,9 +119,25 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                 body: JSON.stringify({ ...params }),
             }).then(response => response.json());
         },
+
+        fetchRxs: async (params: fetchProps, clientId: string) => {
+            return fetch(`https://api.primaverahealthcare.com/rx`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'x-tenant': clientId
+                },
+                body: JSON.stringify({
+                    sortBy: "-paidDate,-paidAmount",
+                    limit: 10,
+                    page: 1,
+                    ...omit(params, ['source']),
+                }),
+            }).then(response => response.json());
+        },
     }
 
-    const fetchData: StateContextType['fetchData'] = (params: fetchPivotProps, clientId: string) => {
+    const fetchData: StateContextType['fetchData'] = (params: fetchProps, clientId: string) => {
         setIsFetching(true);
         return contextValue
             .fetchData(params, clientId)
@@ -127,7 +153,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
             });
     };
 
-    const fetchTrend: StateContextType['fetchTrend'] = (params: fetchPivotProps, clientId: string) => {
+    const fetchTrend: StateContextType['fetchTrend'] = (params: fetchProps, clientId: string) => {
         setIsFetchingTrend(true);
         return contextValue
             .fetchTrend(params, clientId)
@@ -143,11 +169,28 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
             });
     };
 
+    const fetchRxs: StateContextType['fetchRxs'] = (params: fetchProps, clientId: string) => {
+        setIsFetchingRxs(true);
+        return contextValue
+            .fetchRxs(params, clientId)
+            .then(res => {
+                setIsFetchingRxs(false);
+                return res;
+            })
+            .then(data => data)
+            .catch(err => {
+                setError(err);
+                setIsFetchingRxs(false);
+                return Promise.reject(err);
+            });
+    };
+
     return <StateContext.Provider
         value={{
             ...contextValue,
             fetchData,
             fetchTrend,
+            fetchRxs,
         }}>{props.children}
     </StateContext.Provider>;
 }

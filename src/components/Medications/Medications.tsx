@@ -12,11 +12,11 @@ import {
     TableRow
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import { isNil } from 'lodash';
+import { isEmpty, isNil } from 'lodash';
 import NumberFormat from 'react-number-format';
 
 import Divider from '../../common/Divider/Divider';
-import { MedicationsProps } from '../../interfaces';
+import { MedicationsProps, MetaProps } from '../../interfaces';
 import { useAppState } from '../../state';
 import { width_100 } from '../../utils';
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
     box: {
         padding: '12px',
         boxShadow: '0 3px 5px 0 rgb(0 0 0 / 10%)',
-        height: 665,
+        height: 683,
         margin: '12px 4px'
     },
     table: {
@@ -40,13 +40,14 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function Medications(props: { rxs: MedicationsProps[] }): ReactElement {
+export default function Medications(props: { rxs: { data: MedicationsProps[], meta: MetaProps }, query: any, clientId: string }): ReactElement {
     const classes = useStyles();
-    const { isFetching } = useAppState();
+    const { isFetching, isFetchingRxs, fetchRxs } = useAppState();
     // hook for default state of the query params to use
     const [dataSource, setDataSource] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [meta, setMeta] = React.useState({ count: 0, limit: 10, page: 1 });
 
     /**
      * @description Mapping data to represent information.
@@ -62,10 +63,27 @@ export default function Medications(props: { rxs: MedicationsProps[] }): ReactEl
         });
     }
 
+    /**
+     * @description Handle pagination events
+     * @param {any} event
+     * @param {number} newPage
+     * @author Frank Corona Prendes <frank.corona@primavera,care>
+     */
     const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
+        fetchRxs({ ...props.query, page: newPage + 1 }, props.clientId)
+            .then((response) => {
+                // @ts-ignore
+                setDataSource(mappedInformation(response.data));
+                setMeta(response.meta);
+                setPage(newPage);
+            })
     };
 
+    /**
+     * @description Handle event on change the limit per pages
+     * @param {React.ChangeEvent<HTMLInputElement>} event
+     * @author Frank Corona Prendes <frank.corona@primavera,care>
+     */
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
@@ -74,7 +92,9 @@ export default function Medications(props: { rxs: MedicationsProps[] }): ReactEl
     // using the hook for wait for the update of the props and update the datasource
     useEffect(() => {
         // @ts-ignore
-        setDataSource(mappedInformation(props.rxs));
+        setDataSource(mappedInformation(props.rxs.data));
+        // @ts-ignore
+        setMeta(props.rxs.meta);
     }, [props.rxs])
 
     return (
@@ -82,7 +102,8 @@ export default function Medications(props: { rxs: MedicationsProps[] }): ReactEl
             <Typography variant='h5' component='h1' gutterBottom align="left">
                 Medications
             </Typography>
-            {isFetching
+            <Divider/>
+            {(isFetching || isFetchingRxs)
                 ? <LinearProgress/>
                 : <>
                     <TableContainer>
@@ -98,7 +119,7 @@ export default function Medications(props: { rxs: MedicationsProps[] }): ReactEl
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {dataSource.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: MedicationsProps, index: number) => (
+                                {dataSource.map((row: MedicationsProps, index: number) => (
                                     <TableRow key={index}>
                                         <TableCell align="left">
                                             <Typography variant={'body2'}
@@ -128,15 +149,17 @@ export default function Medications(props: { rxs: MedicationsProps[] }): ReactEl
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    {!isEmpty(meta) &&
                     <TablePagination
                         rowsPerPageOptions={[10]}
                         component="div"
-                        count={dataSource.length}
+                        count={meta.count}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onChangePage={handleChangePage}
                         onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
+                    }
                 </>
             }
             <Divider/>
