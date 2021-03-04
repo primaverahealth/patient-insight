@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
 import { Backdrop, Box, CircularProgress, Container, makeStyles, Theme, Typography } from '@material-ui/core';
+
 import Copyright from './components/Copyright/Copyright';
 import Summary from './components/Summary/Summary';
 import HCCs from './components/HCCs/HCCs';
-
 import { useAppState } from './state';
 import { ClientConfiguration } from './interfaces';
 import MemberTrendTracker from './components/MemberTrendTracker/MemberTrendTracker';
@@ -60,6 +60,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     const [claimsSpecialists, setClaimsSpecialists] = React.useState({ data: [], meta: {} });
     const [claimsInpatient, setClaimsInpatient] = React.useState({ data: [], meta: {} });
     const [hccCodes, setHCCs] = React.useState([]);
+    const [mra, setMRA] = React.useState([]);
 
     /**
      * @description Using AppState to get all nested data for components
@@ -67,7 +68,7 @@ export default function App(client: ClientConfiguration): ReactElement {
      */
     const fetchAllata = () => {
         fetchData(query, clientId)
-            .then(({ financialDetail, financialMember, hospPivot, trend, medications, specialists, inpatient, hcc }) => {
+            .then(({ financialDetail, financialMember, hospPivot, trend, medications, specialists, inpatient, hcc, mras }) => {
                 financialDetail.then(({ data }: any) => setFinancialSummaryDetail(data));
                 financialMember.then(({ data }: any) => setFinancialSummary(data));
                 hospPivot.then(({ data }: any) => setHospitalPivot(data));
@@ -76,6 +77,13 @@ export default function App(client: ClientConfiguration): ReactElement {
                 specialists.then((response: any) => setClaimsSpecialists(response));
                 inpatient.then((response: any) => setClaimsInpatient(response));
                 hcc.then(({ data }: any) => setHCCs(data));
+                /**
+                 * Annotation: In case we decide format the dates
+                 * map(data, (item) => {
+                        item.date = moment(new Date(item.date).toISOString()).format('MMM, YYYY');
+                    });
+                 */
+                mras.then(({ data }: any) => setMRA(data));
             });
     };
 
@@ -104,7 +112,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                     <Box className={classes.box}>
                         <Typography variant='h4' component='h1' gutterBottom>
                             Patient Insight {client.patientId}!
-                    </Typography>
+                        </Typography>
                         <Summary summary={financialSummary} />
                         <HCCs hccCodes={hccCodes} />
                         <SectionFinancial data={{ financialSummary, hospitalPivot }} />
@@ -113,7 +121,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                         <InpatientOutpatient inpatient={claimsInpatient} query={query} clientId={clientId} />
                         <Medications rxs={memberMedications} query={query} clientId={clientId} />
                         <SpecialtyBreakdown summary={financialSummaryDetail} />
-                        <MRA />
+                        <MRA mras={mra} financials={financialSummary} />
                         <Copyright />
                     </Box>
                 </>
