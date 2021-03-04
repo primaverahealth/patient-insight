@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { Paper } from '@material-ui/core';
 
 import { commonStyles } from '../../utils';
@@ -14,7 +14,7 @@ export default function MLR(props: { data: FinancialWidgetsProps }): ReactElemen
     const singleValueProps: SingleValueProps = { data: { key: 'mlr', value: mlr } }
     const footerProps: FinancialFooterProps = { data: { name: 'MLR' } };
 
-    useEffect(() => {
+    React.useEffect(() => {
         setMLR(data.mlr || 0);
     }, [props.data])
 

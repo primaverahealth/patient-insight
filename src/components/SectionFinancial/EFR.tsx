@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { Paper } from '@material-ui/core';
 
 import { commonStyles } from '../../utils';
@@ -14,7 +14,7 @@ export default function EFR(props: { data: FinancialWidgetsProps }): ReactElemen
     const singleValueProps: SingleValueProps = { data: { value: efr } }
     const footerProps: FinancialFooterProps = { data: { name: 'EFR' } };
 
-    useEffect(() => {
+    React.useEffect(() => {
         setEFR(data.efr || 0);
     }, [props.data])
 

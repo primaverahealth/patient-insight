@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import Typography from '@material-ui/core/Typography';
 import {
     Avatar,
@@ -56,7 +56,7 @@ export default function MemberTrendTracker(props: { trend: TrendProps[], toggleS
         props.toggleSource(source);
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
         const { from, to } = getDate('l6m');
         const months = getMonthsBetweenDates(moment(from), moment(to));
 

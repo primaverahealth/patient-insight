@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { filter, get, isNil, round, sumBy } from 'lodash';
 
@@ -34,7 +34,7 @@ export default function SectionFinancial(props: SectionFinancialProps): ReactEle
     const [dataSource, setDataSource] = React.useState({});
 
     // using the hook for wait for the update of the props and update the datasource
-    useEffect(() => {
+    React.useEffect(() => {
         // @ts-ignore
         setDataSource(mappingSource());
     }, [props.data])

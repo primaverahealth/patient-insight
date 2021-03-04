@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import Typography from '@material-ui/core/Typography';
 import {
     LinearProgress,
@@ -52,7 +52,7 @@ export default function Summary(props: { summary: FinancialMemberResponse }): Re
     const [dataSource, setDataSource] = React.useState([]);
 
     // using the hook for wait for the update of the props and update the datasource
-    useEffect(() => {
+    React.useEffect(() => {
         // @ts-ignore
         setDataSource(mappedInformation([props.summary]));
     }, [props.summary])

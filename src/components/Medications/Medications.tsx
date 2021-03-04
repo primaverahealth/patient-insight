@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import {
     LinearProgress,
     makeStyles,
@@ -91,7 +91,7 @@ export default function Medications(props: { rxs: { data: MedicationsProps[], me
     };
 
     // using the hook for wait for the update of the props and update the datasource
-    useEffect(() => {
+    React.useEffect(() => {
         // @ts-ignore
         setDataSource(mappedInformation(props.rxs.data));
         // @ts-ignore
