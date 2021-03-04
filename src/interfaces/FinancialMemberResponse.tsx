@@ -15,4 +15,10 @@ export interface FinancialMemberResponse {
     lastYearMRA?: number,
     mlr?: number,
     efr?: number,
+    member?: {
+        dob?: string,
+        gender?: string,
+        id?: string,
+        name?: { first: string, last: string, middle: string }
+    }
 }
