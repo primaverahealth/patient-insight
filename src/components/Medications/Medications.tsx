@@ -19,6 +19,7 @@ import Divider from '../../common/Divider/Divider';
 import { MedicationsProps, MetaProps } from '../../interfaces';
 import { useAppState } from '../../state';
 import { width_100, height_100 } from '../../utils';
+import NoDataDisplay from '../../common/NoDataDisplay/NoDataDisplay';
 
 const useStyles = makeStyles(() => ({
     box: {
@@ -106,61 +107,65 @@ export default function Medications(props: { rxs: { data: MedicationsProps[], me
             {(isFetching || isFetchingRxs)
                 ? <LinearProgress />
                 : <>
-                    <TableContainer>
-                        <Table className={classes.table} size="medium" aria-label="medications table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="left">Drug Name</TableCell>
-                                    <TableCell align="right">Paid Amount</TableCell>
-                                    <TableCell align="right">Units</TableCell>
-                                    <TableCell align="left">Prescriber</TableCell>
-                                    <TableCell align="left">Date Dispensed</TableCell>
-                                    <TableCell align="left">Type</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {dataSource.map((row: MedicationsProps, index: number) => (
-                                    <TableRow key={index}>
-                                        <TableCell align="left">
-                                            <Typography variant={'body2'}
-                                                className={classes.action}>{row.drugName}</Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <NumberFormat
-                                                value={row.paidAmount}
-                                                displayType={'text'}
-                                                thousandSeparator={true}
-                                                decimalScale={2}
-                                                prefix={'$'} />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Typography variant={'body2'}>{row.qty}</Typography>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Typography variant={'body2'}>{row.prescribingName}</Typography>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Typography variant={'body2'}>{row.paidDate}</Typography>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Typography variant={'body2'}>{row.claimType}</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    {(!isEmpty(meta) && meta.count >= 10) &&
-                        <TablePagination
-                            rowsPerPageOptions={[10]}
-                            component="div"
-                            count={meta.count}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onChangePage={handleChangePage}
-                            onChangeRowsPerPage={handleChangeRowsPerPage}
-                        />
-                    }
+                    {!isEmpty(dataSource)
+                        ? <>
+                            <TableContainer>
+                                <Table className={classes.table} size="medium" aria-label="medications table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell align="left">Drug Name</TableCell>
+                                            <TableCell align="right">Paid Amount</TableCell>
+                                            <TableCell align="right">Units</TableCell>
+                                            <TableCell align="left">Prescriber</TableCell>
+                                            <TableCell align="left">Date Dispensed</TableCell>
+                                            <TableCell align="left">Type</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {dataSource.map((row: MedicationsProps, index: number) => (
+                                            <TableRow key={index}>
+                                                <TableCell align="left">
+                                                    <Typography variant={'body2'}
+                                                        className={classes.action}>{row.drugName}</Typography>
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <NumberFormat
+                                                        value={row.paidAmount}
+                                                        displayType={'text'}
+                                                        thousandSeparator={true}
+                                                        decimalScale={2}
+                                                        prefix={'$'} />
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <Typography variant={'body2'}>{row.qty}</Typography>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    <Typography variant={'body2'}>{row.prescribingName}</Typography>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    <Typography variant={'body2'}>{row.paidDate}</Typography>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                    <Typography variant={'body2'}>{row.claimType}</Typography>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            {(!isEmpty(meta) && meta.count >= 10) &&
+                                <TablePagination
+                                    rowsPerPageOptions={[10]}
+                                    component="div"
+                                    count={meta.count}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onChangePage={handleChangePage}
+                                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                                />
+                            }
+                        </>
+                        : <NoDataDisplay />}
                 </>
             }
         </Paper>
