@@ -146,8 +146,17 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                         'x-tenant': clientId
                     },
                     body: JSON.stringify({}),
-                })
-            ]).then(([financialDetail, financialMember, hospPivot, trend, medications, specialists, inpatient, hcc]) => {
+                }),
+
+                fetch(`https://api.primaverahealthcare.com/mras`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-tenant': clientId
+                    },
+                    body: JSON.stringify({ ...omit(params, ['source']), groupBy: 'memberId' }),
+                }),
+            ]).then(([financialDetail, financialMember, hospPivot, trend, medications, specialists, inpatient, hcc, mras]) => {
                 return {
                     financialDetail: financialDetail.json(),
                     financialMember: financialMember.json(),
@@ -157,6 +166,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                     specialists: specialists.json(),
                     inpatient: inpatient.json(),
                     hcc: hcc.json(),
+                    mras: mras.json(),
                 }
             })
         },
@@ -220,7 +230,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                     ...omit(params, ['source']),
                 }),
             }).then(response => response.json());
-        },
+        }
     }
 
     const fetchData: StateContextType['fetchData'] = (params: fetchProps, clientId: string) => {
