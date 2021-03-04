@@ -12,6 +12,7 @@ import Specialists from './components/Specialists/Specialists';
 import Medications from './components/Medications/Medications';
 import SpecialtyBreakdown from './components/SpecialtyBreakdown/SpecialtyBreakdown';
 import SectionFinancial from './components/SectionFinancial/SectionFinancial';
+import MRA from './components/MRA/MRA';
 import { width_100 } from './utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -112,6 +113,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                         <InpatientOutpatient inpatient={claimsInpatient} query={query} clientId={clientId} />
                         <Medications rxs={memberMedications} query={query} clientId={clientId} />
                         <SpecialtyBreakdown summary={financialSummaryDetail} />
+                        <MRA />
                         <Copyright />
                     </Box>
                 </>
