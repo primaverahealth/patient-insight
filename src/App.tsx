@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { Backdrop, Box, CircularProgress, Container, makeStyles, Theme, Typography } from '@material-ui/core';
 import Copyright from './components/Copyright/Copyright';
 import Summary from './components/Summary/Summary';
@@ -52,6 +52,7 @@ export default function App(client: ClientConfiguration): ReactElement {
         source: 'mmr'
     });
     const [financialSummary, setFinancialSummary] = React.useState({});
+    const [financialSummaryDetail, setFinancialSummaryDetail] = React.useState([]);
     const [hospitalPivot, setHospitalPivot] = React.useState({});
     const [memberTrend, setMemberTrend] = React.useState([]);
     const [memberMedications, setMedications] = React.useState({ data: [], meta: {} });
@@ -65,7 +66,8 @@ export default function App(client: ClientConfiguration): ReactElement {
      */
     const fetchAllata = () => {
         fetchData(query, clientId)
-            .then(({ financialMember, hospPivot, trend, medications, specialists, inpatient, hcc }) => {
+            .then(({ financialDetail, financialMember, hospPivot, trend, medications, specialists, inpatient, hcc }) => {
+                financialDetail.then(({ data }: any) => setFinancialSummaryDetail(data));
                 financialMember.then(({ data }: any) => setFinancialSummary(data));
                 hospPivot.then(({ data }: any) => setHospitalPivot(data));
                 trend.then(({ data }: any) => setMemberTrend(data));
@@ -87,7 +89,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     }
 
     // using the hook for fech data on mount component
-    useEffect(() => {
+    React.useEffect(() => {
         fetchAllata();
     }, [query])
 
@@ -109,7 +111,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                         <Specialists specialists={claimsSpecialists} query={query} clientId={clientId} />
                         <InpatientOutpatient inpatient={claimsInpatient} query={query} clientId={clientId} />
                         <Medications rxs={memberMedications} query={query} clientId={clientId} />
-                        <SpecialtyBreakdown />
+                        <SpecialtyBreakdown summary={financialSummaryDetail} />
                         <Copyright />
                     </Box>
                 </>

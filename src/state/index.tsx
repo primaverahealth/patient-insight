@@ -56,13 +56,13 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
          */
         fetchData: async (params: fetchProps, clientId: string) => {
             return Promise.all([
-                fetch(`https://api.primaverahealthcare.com/financial-summary-detail/pivot`, {
+                fetch(`https://api.primaverahealthcare.com/financial-summary-detail/${params.patientId}`, {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json',
                         'x-tenant': clientId
                     },
-                    body: JSON.stringify({ ...omit(params, ['source']) }),
+                    body: JSON.stringify({ ...omit(params, ['source', 'patientId']) }),
                 }),
 
                 fetch(`https://api.primaverahealthcare.com/financial-member/${params.patientId}`, {
@@ -147,9 +147,9 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>): JS
                     },
                     body: JSON.stringify({}),
                 })
-            ]).then(([pivot, financialMember, hospPivot, trend, medications, specialists, inpatient, hcc]) => {
+            ]).then(([financialDetail, financialMember, hospPivot, trend, medications, specialists, inpatient, hcc]) => {
                 return {
-                    pivot: pivot.json(),
+                    financialDetail: financialDetail.json(),
                     financialMember: financialMember.json(),
                     hospPivot: hospPivot.json(),
                     trend: trend.json(),
