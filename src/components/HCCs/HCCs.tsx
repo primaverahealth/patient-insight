@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
-import { List, ListItem, ListItemText, makeStyles, Paper } from '@material-ui/core';
+import { List, ListItem, ListItemText, makeStyles, Paper, Theme } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { takeRight, map, toInteger, each, isNil, find, isEmpty, orderBy } from 'lodash';
 
-import { width_50, height_100 } from '../../utils';
+import { width_50, width_100, height_100 } from '../../utils';
 import Divider from '../../common/Divider/Divider';
 import NoDataDisplay from '../../common/NoDataDisplay/NoDataDisplay';
 
@@ -22,19 +22,25 @@ export interface HccCodesProps {
     hccCodes: HccCode[]
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     box: {
         padding: '12px',
         boxShadow: '0 3px 5px 0 rgb(0 0 0 / 10%)',
         height: height_100,
         margin: '12px 4px',
-        width: width_50,
+        [theme.breakpoints.up('sm')]: {
+            width: width_50,
+        },
     },
     root: {
+        magin: theme.spacing(2),
         display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
+        justifyContent: 'space-between',
+        width: width_100,
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column'
+        },
+    }
 }))
 
 export default function HCCs(props: { hccCodes: HccProps[] }): ReactElement {

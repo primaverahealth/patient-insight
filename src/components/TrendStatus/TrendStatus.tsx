@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 
-import { toTitleCase, width_50 } from '../../utils';
+import { toTitleCase, width_50, width_100 } from '../../utils';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     badgeContainer: {
         display: 'flex',
         justifyContent: 'center',
@@ -14,7 +14,12 @@ const useStyles = makeStyles(() => ({
         textAlign: 'center',
         padding: '0 8px',
         height: '24px',
-        width: width_50
+        [theme.breakpoints.down('sm')]: {
+            width: width_100
+        },
+        [theme.breakpoints.up('sm')]: {
+            width: width_50
+        }
     },
     badgeActive: {
         fontSize: '32px',
@@ -47,7 +52,7 @@ export default function TrendStatus(props: { value: string }): ReactElement {
                     </small>
                     <span className={classes.span}>
                         <Typography variant={'caption'}
-                                    className={classes.typo}>{props.value.toUpperCase()}
+                            className={classes.typo}>{props.value.toUpperCase()}
                         </Typography>
                     </span>
                 </div>

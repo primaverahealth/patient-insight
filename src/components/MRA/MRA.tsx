@@ -129,7 +129,7 @@ export default function MRA(props: { mras: MRAProps[], financials: FinancialMemb
             <Typography variant='h5' component='h1' gutterBottom align="left">
                 Risk Score: {riskSroce}
             </Typography>
-            <canvas ref={chartRef} height="100"></canvas>
+            <canvas ref={chartRef} height="150"></canvas>
         </Paper>
     );
 }

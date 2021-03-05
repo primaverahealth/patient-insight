@@ -12,7 +12,8 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow,
+    Theme
 } from '@material-ui/core';
 import moment from 'moment';
 import { includes, keys, map } from 'lodash';
@@ -27,7 +28,7 @@ export interface TrendProps {
     date: string
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     box: {
         padding: '12px',
         boxShadow: '0 3px 5px 0 rgb(0 0 0 / 10%)',
@@ -38,7 +39,10 @@ const useStyles = makeStyles(() => ({
     },
     headerContainer: {
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column'
+        }
     }
 }))
 

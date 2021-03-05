@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import { filter, get, isNil, round, sumBy } from 'lodash';
 
 import MRA from './MRA';
@@ -18,11 +18,14 @@ export interface SectionFinancialProps {
     }
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column'
+        },
     },
 }))
 
@@ -61,19 +64,19 @@ export default function SectionFinancial(props: SectionFinancialProps): ReactEle
     return (
         <>
             {!isFetching &&
-            <div>
-                <div className={classes.root}>
-                    <MRA data={dataSource}/>
-                    <ERVisits data={dataSource}/>
-                    <IPAdmits data={dataSource}/>
+                <div>
+                    <div className={classes.root}>
+                        <MRA data={dataSource} />
+                        <ERVisits data={dataSource} />
+                        <IPAdmits data={dataSource} />
+                    </div>
+                    <div className={classes.root}>
+                        <EFR data={dataSource} />
+                        <MLR data={dataSource} />
+                        <GDR data={dataSource} />
+                        <Readmissions data={dataSource} />
+                    </div>
                 </div>
-                <div className={classes.root}>
-                    <EFR data={dataSource}/>
-                    <MLR data={dataSource}/>
-                    <GDR data={dataSource}/>
-                    <Readmissions data={dataSource}/>
-                </div>
-            </div>
             }
         </>
     );
