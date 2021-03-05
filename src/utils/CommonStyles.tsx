@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from '@material-ui/core';
-import { width_50, width_100 } from './WidthUtils';
+import { width_100 } from './WidthUtils';
 
 
 export const commonStyles = makeStyles((theme: Theme) => ({
