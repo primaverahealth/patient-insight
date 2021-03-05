@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import {
+    Collapse,
     LinearProgress,
     makeStyles,
     Paper,
@@ -118,61 +119,59 @@ export default function Specialists(props: { specialists: { data: ClaimsProps[],
                 Specialists
             </Typography>
             <Divider />
-            {(isFetching || isFetchingClaims)
-                ? <LinearProgress />
-                : <>
-                    {!isEmpty(dataSource)
-                        ? <>
-                            <TableContainer>
-                                <Table className={classes.table} size="medium" aria-label="specialists claim table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell align="left">Specialist</TableCell>
-                                            <TableCell align="left">DOS</TableCell>
-                                            <TableCell align="right">Paid Amount</TableCell>
-                                            <TableCell align="left">Diagnosis</TableCell>
+            {(isFetching || isFetchingClaims) && <LinearProgress />}
+            <Collapse in={!isFetchingClaims}>
+                {!isEmpty(dataSource)
+                    ? <>
+                        <TableContainer>
+                            <Table className={classes.table} size="medium" aria-label="specialists claim table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="left">Specialist</TableCell>
+                                        <TableCell align="left">DOS</TableCell>
+                                        <TableCell align="right">Paid Amount</TableCell>
+                                        <TableCell align="left">Diagnosis</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {dataSource.map((row: ClaimsProps, index: number) => (
+                                        <TableRow key={index}>
+                                            <TableCell align="left">
+                                                <Typography variant={'body2'}>{row.provName}</Typography>
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Typography variant={'body2'}>{row.dateService}</Typography>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <NumberFormat
+                                                    value={row.paidAmount}
+                                                    displayType={'text'}
+                                                    thousandSeparator={true}
+                                                    decimalScale={2}
+                                                    prefix={'$'} />
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Typography variant={'body2'}>{row.primaryDiagnosis}</Typography>
+                                            </TableCell>
                                         </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {dataSource.map((row: ClaimsProps, index: number) => (
-                                            <TableRow key={index}>
-                                                <TableCell align="left">
-                                                    <Typography variant={'body2'}>{row.provName}</Typography>
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    <Typography variant={'body2'}>{row.dateService}</Typography>
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    <NumberFormat
-                                                        value={row.paidAmount}
-                                                        displayType={'text'}
-                                                        thousandSeparator={true}
-                                                        decimalScale={2}
-                                                        prefix={'$'} />
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    <Typography variant={'body2'}>{row.primaryDiagnosis}</Typography>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            {(!isEmpty(meta) && meta.count >= 10) &&
-                                <TablePagination
-                                    rowsPerPageOptions={[10]}
-                                    component="div"
-                                    count={meta.count}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onChangePage={handleChangePage}
-                                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                                />
-                            }
-                        </>
-                        : <NoDataDisplay />}
-                </>
-            }
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        {(!isEmpty(meta) && meta.count >= 10) &&
+                            <TablePagination
+                                rowsPerPageOptions={[10]}
+                                component="div"
+                                count={meta.count}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onChangePage={handleChangePage}
+                                onChangeRowsPerPage={handleChangeRowsPerPage}
+                            />
+                        }
+                    </>
+                    : <NoDataDisplay />}
+            </Collapse>
         </Paper>
     );
 }

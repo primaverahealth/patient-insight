@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import {
+    Collapse,
     LinearProgress,
     makeStyles,
     Paper,
@@ -104,70 +105,68 @@ export default function Medications(props: { rxs: { data: MedicationsProps[], me
                 Medications
             </Typography>
             <Divider />
-            {(isFetching || isFetchingRxs)
-                ? <LinearProgress />
-                : <>
-                    {!isEmpty(dataSource)
-                        ? <>
-                            <TableContainer>
-                                <Table className={classes.table} size="medium" aria-label="medications table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell align="left">Drug Name</TableCell>
-                                            <TableCell align="right">Paid Amount</TableCell>
-                                            <TableCell align="right">Units</TableCell>
-                                            <TableCell align="left">Prescriber</TableCell>
-                                            <TableCell align="left">Date Dispensed</TableCell>
-                                            <TableCell align="left">Type</TableCell>
+            {(isFetching || isFetchingRxs) && <LinearProgress />}
+            <Collapse in={!isFetchingRxs}>
+                {!isEmpty(dataSource)
+                    ? <>
+                        <TableContainer>
+                            <Table className={classes.table} size="medium" aria-label="medications table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="left">Drug Name</TableCell>
+                                        <TableCell align="right">Paid Amount</TableCell>
+                                        <TableCell align="right">Units</TableCell>
+                                        <TableCell align="left">Prescriber</TableCell>
+                                        <TableCell align="left">Date Dispensed</TableCell>
+                                        <TableCell align="left">Type</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {dataSource.map((row: MedicationsProps, index: number) => (
+                                        <TableRow key={index}>
+                                            <TableCell align="left">
+                                                <Typography variant={'body2'}
+                                                    className={classes.action}>{row.drugName}</Typography>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <NumberFormat
+                                                    value={row.paidAmount}
+                                                    displayType={'text'}
+                                                    thousandSeparator={true}
+                                                    decimalScale={2}
+                                                    prefix={'$'} />
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Typography variant={'body2'}>{row.qty}</Typography>
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Typography variant={'body2'}>{row.prescribingName}</Typography>
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Typography variant={'body2'}>{row.paidDate}</Typography>
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Typography variant={'body2'}>{row.claimType}</Typography>
+                                            </TableCell>
                                         </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {dataSource.map((row: MedicationsProps, index: number) => (
-                                            <TableRow key={index}>
-                                                <TableCell align="left">
-                                                    <Typography variant={'body2'}
-                                                        className={classes.action}>{row.drugName}</Typography>
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    <NumberFormat
-                                                        value={row.paidAmount}
-                                                        displayType={'text'}
-                                                        thousandSeparator={true}
-                                                        decimalScale={2}
-                                                        prefix={'$'} />
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    <Typography variant={'body2'}>{row.qty}</Typography>
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    <Typography variant={'body2'}>{row.prescribingName}</Typography>
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    <Typography variant={'body2'}>{row.paidDate}</Typography>
-                                                </TableCell>
-                                                <TableCell align="left">
-                                                    <Typography variant={'body2'}>{row.claimType}</Typography>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            {(!isEmpty(meta) && meta.count >= 10) &&
-                                <TablePagination
-                                    rowsPerPageOptions={[10]}
-                                    component="div"
-                                    count={meta.count}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onChangePage={handleChangePage}
-                                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                                />
-                            }
-                        </>
-                        : <NoDataDisplay />}
-                </>
-            }
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        {(!isEmpty(meta) && meta.count >= 10) &&
+                            <TablePagination
+                                rowsPerPageOptions={[10]}
+                                component="div"
+                                count={meta.count}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onChangePage={handleChangePage}
+                                onChangeRowsPerPage={handleChangeRowsPerPage}
+                            />
+                        }
+                    </>
+                    : <NoDataDisplay />}
+            </Collapse>
         </Paper>
     );
 }

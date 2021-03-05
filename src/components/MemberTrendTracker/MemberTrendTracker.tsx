@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import {
     Avatar,
     Chip,
+    Collapse,
     LinearProgress,
     makeStyles,
     Paper,
@@ -96,10 +97,10 @@ export default function MemberTrendTracker(props: { trend: TrendProps[], toggleS
                     color={isRevenue ? 'primary' : 'secondary'}
                 />
             </div>
-            <Divider/>
-            {isFetchingTrend
-                ? <LinearProgress/>
-                : <TableContainer>
+            <Divider />
+            {isFetchingTrend && <LinearProgress />}
+            <Collapse in={!isFetchingTrend}>
+                <TableContainer>
                     <Table className={classes.table} size="medium" aria-label="a dense table">
                         <TableHead>
                             <TableRow>
@@ -112,14 +113,14 @@ export default function MemberTrendTracker(props: { trend: TrendProps[], toggleS
                             <TableRow>
                                 {columns.map((column) => (
                                     <TableCell key={column} align="center">
-                                        <TrendStatus value={dataSource[column]}/>
+                                        <TrendStatus value={dataSource[column]} />
                                     </TableCell>
                                 ))}
                             </TableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
-            }
+            </Collapse>
         </Paper>
     );
 }

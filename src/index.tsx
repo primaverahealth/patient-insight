@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom";
 
 import App from './App';
@@ -13,7 +12,7 @@ import AppStateProvider from './state';
 export const init = (client: ClientConfiguration): void => {
     ReactDOM.render(
         <AppStateProvider>
-            <App clientId={client.clientId} patientId={client.patientId}/>
+            <App clientId={client.clientId} patientId={client.patientId} />
         </AppStateProvider>,
         document.getElementById("root")
     )
