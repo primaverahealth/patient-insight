@@ -14,13 +14,16 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/data-grid": "^4.0.0-alpha.20",
+    "@types/date-fns": "^2.6.0",
     "chart.js": "^2.9.4",
+    "date-fns": "^2.19.0",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-number-format": "^4.4.4"
+    "react-number-format": "^4.4.4",
+    "rsuite": "^4.9.2"
   },
   "devDependencies": {
     "@babel/core": "^7.13.1",

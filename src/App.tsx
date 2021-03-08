@@ -14,6 +14,7 @@ import SpecialtyBreakdown from './components/SpecialtyBreakdown/SpecialtyBreakdo
 import SectionFinancial from './components/SectionFinancial/SectionFinancial';
 import MRA from './components/MRA/MRA';
 import { width_100 } from './utils';
+import DateRange from './common/DateRange/DateRange';
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
