@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import { isNil } from 'lodash';
 import NumberFormat from 'react-number-format';
 
@@ -50,12 +50,14 @@ export default function SingleValue(props: SingleValueProps): ReactElement {
     return (
         <div className={styles.container}>
             <div className={isNegative(data.value)}>
-                <NumberFormat
-                    decimalScale={2}
-                    suffix={'%'}
-                    value={data.value}
-                    displayType={'text'}
-                />
+                <Typography variant="h1" className={styles.value}>
+                    <NumberFormat
+                        decimalScale={2}
+                        suffix={'%'}
+                        value={data.value}
+                        displayType={'text'}
+                    />
+                </Typography>
             </div>
         </div>
     )

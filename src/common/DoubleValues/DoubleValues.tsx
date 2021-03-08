@@ -36,12 +36,14 @@ export default function DoubleValues(props: DoubleValuesProps): ReactElement {
         <div className={classes.container}>
             {data.map((item: IDoubleValues) => (
                 <div className={classes.valueContainer} key={item.description}>
-                    <NumberFormat
-                        className={classes.value}
-                        value={item.value}
-                        displayType={'text'}
-                        thousandSeparator={true}
-                        decimalScale={2} />
+                    <Typography variant="h1" className={classes.value}>
+                        <NumberFormat
+                            className={classes.value}
+                            value={item.value}
+                            displayType={'text'}
+                            thousandSeparator={true}
+                            decimalScale={2} />
+                    </Typography>
                     <Typography variant={'caption'}>{item.description}</Typography>
                 </div>
             ))}

@@ -11,7 +11,7 @@ export default function FinancialFooter(props: FinancialFooterProps): ReactEleme
 
     return (
         <div className={common.footer}>
-            <Typography variant='subtitle1' gutterBottom align="center">
+            <Typography variant='subtitle1' align="center">
                 {data.name}
             </Typography>
         </div>

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Backdrop, Box, CircularProgress, Container, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Backdrop, Box, CircularProgress, Container, makeStyles, Theme } from '@material-ui/core';
 
 import Copyright from './components/Copyright/Copyright';
 import Summary from './components/Summary/Summary';
@@ -110,9 +110,7 @@ export default function App(client: ClientConfiguration): ReactElement {
             {!isFetching &&
                 <>
                     <Box className={classes.box}>
-                        <Typography variant='h4' component='h1' gutterBottom>
-                            Patient Insight {client.patientId}!
-                        </Typography>
+                        <DateRange />
                         <Summary summary={financialSummary} />
                         <HCCs hccCodes={hccCodes} />
                         <SectionFinancial data={{ financialSummary, hospitalPivot }} />
