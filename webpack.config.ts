@@ -26,6 +26,7 @@ const config: webpack.Configuration = {
                     },
                 },
             },
+            { test: /\.css$/, use: ['style-loader', 'css-loader'] }
         ],
     },
     resolve: {
@@ -49,6 +50,9 @@ const config: webpack.Configuration = {
             eslint: {
                 files: "./src/**/*",
             },
+        }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
         }),
     ],
 };
