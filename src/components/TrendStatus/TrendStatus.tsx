@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 
-import { toTitleCase, width_50, width_100 } from '../../utils';
+import { toTitleCase, width_100 } from '../../utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
     badgeContainer: {
@@ -16,9 +16,6 @@ const useStyles = makeStyles((theme: Theme) => ({
         height: '24px',
         [theme.breakpoints.down('sm')]: {
             width: width_100
-        },
-        [theme.breakpoints.up('sm')]: {
-            width: width_50
         }
     },
     badgeActive: {

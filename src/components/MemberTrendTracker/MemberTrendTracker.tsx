@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import Typography from '@material-ui/core/Typography';
 import {
-    Avatar,
     Chip,
     Collapse,
     LinearProgress,
@@ -19,7 +18,7 @@ import moment from 'moment';
 import { includes, keys, map } from 'lodash';
 
 import Divider from '../../common/Divider/Divider';
-import { getDate, getMonthsBetweenDates, width_100 } from '../../utils';
+import { getMonthsBetweenDates, width_100 } from '../../utils';
 import TrendStatus from '../TrendStatus/TrendStatus';
 import { useAppState } from '../../state';
 
@@ -46,11 +45,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }))
 
-export default function MemberTrendTracker(props: { trend: TrendProps[], toggleSource: Function }): ReactElement {
+export default function MemberTrendTracker(props: { trend: TrendProps[], toggleSource: Function, query: any }): ReactElement {
     const classes = useStyles();
     const { isFetchingTrend } = useAppState();
     // Handling React Hooks
-    const [filterAvatar, setFilterAvatar] = React.useState('R');
     const [isRevenue, setIsRevenue] = React.useState(true);
     const [dataSource, setDataSource] = React.useState([]);
     const [columns, setColumns] = React.useState([]);
@@ -62,7 +60,7 @@ export default function MemberTrendTracker(props: { trend: TrendProps[], toggleS
     }
 
     React.useEffect(() => {
-        const { from, to } = getDate('l6m');
+        const { from, to } = props.query;
         const months = getMonthsBetweenDates(moment(from), moment(to));
 
         /**
@@ -81,11 +79,9 @@ export default function MemberTrendTracker(props: { trend: TrendProps[], toggleS
         // @ts-ignore
         setDataSource(source)
 
-        // update the avatar
-        setFilterAvatar(() => isRevenue ? 'R' : 'E');
         // make the API call
         // ...
-    }, [isRevenue, props.trend])
+    }, [props.trend, props.query])
 
     return (
         <Paper elevation={1} className={classes.box}>
@@ -94,7 +90,6 @@ export default function MemberTrendTracker(props: { trend: TrendProps[], toggleS
                     Member Tracker / Trend Graphic
                 </Typography>
                 <Chip
-                    avatar={<Avatar>{filterAvatar}</Avatar>}
                     label={isRevenue ? 'Revenue' : 'Eligibility'}
                     clickable
                     onClick={handleFilter}
@@ -105,18 +100,18 @@ export default function MemberTrendTracker(props: { trend: TrendProps[], toggleS
             {isFetchingTrend && <LinearProgress />}
             <Collapse in={!isFetchingTrend}>
                 <TableContainer>
-                    <Table className={classes.table} size="medium" aria-label="a dense table">
+                    <Table className={classes.table} size="medium" aria-label="patient trend tracker">
                         <TableHead>
                             <TableRow>
                                 {columns.map((column) => (
-                                    <TableCell align="left" key={column}>{column}</TableCell>
+                                    <TableCell width={"170"} align="left" key={column}>{column}</TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             <TableRow>
                                 {columns.map((column) => (
-                                    <TableCell key={column} align="center">
+                                    <TableCell width={"170"} key={column} align="center">
                                         <TrendStatus value={dataSource[column]} />
                                     </TableCell>
                                 ))}

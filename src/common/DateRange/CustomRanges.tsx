@@ -11,14 +11,14 @@ export const Ranges: any = [
     {
         label: 'Last 12 Months',
         value: [
-            dateFns.startOfDay(dateFns.subMonths(new Date(), 12)),
+            dateFns.startOfDay(dateFns.subMonths(new Date(), 11)),
             dateFns.endOfDay(new Date())
         ]
     },
     {
         label: 'Last 6 Months',
         value: [
-            dateFns.startOfDay(dateFns.subMonths(new Date(), 6)),
+            dateFns.startOfDay(dateFns.subMonths(new Date(), 5)),
             dateFns.endOfDay(new Date())
         ]
     }

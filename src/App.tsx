@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Backdrop, Box, CircularProgress, Container, makeStyles, Theme } from '@material-ui/core';
+import { Backdrop, CircularProgress, makeStyles, Theme } from '@material-ui/core';
 import * as dateFns from 'date-fns';
 import format from 'date-fns/format';
 
@@ -23,19 +23,23 @@ const useStyles = makeStyles((theme: Theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        width: width_100
+        padding: '12px'
     },
     box: {
         width: 'inherit'
-    },
-    specialists: {
-        display: 'flex',
-        flexDirection: 'row',
     },
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
         color: 'primary',
     },
+    section: {
+        [theme.breakpoints.down('sm')]: {
+            width: width_100
+        },
+        [theme.breakpoints.up('sm')]: {
+            width: width_100
+        }
+    }
 }))
 
 /**
@@ -51,7 +55,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     const [clientId] = React.useState(client.clientId);
     const [query, setQuery] = React.useState({
         patientId: client.patientId,
-        from: format(dateFns.startOfDay(dateFns.subMonths(new Date(), 6)), 'yyyy-MM-dd'),
+        from: format(dateFns.startOfDay(dateFns.subMonths(new Date(), 5)), 'yyyy-MM-dd'),
         to: format(dateFns.endOfDay(new Date()), 'yyyy-MM-dd'),
         source: 'mmr'
     });
@@ -102,7 +106,7 @@ export default function App(client: ClientConfiguration): ReactElement {
 
     /**
      * @description Handle date changes
-     * @param {Date[]}range
+     * @param {Date[]} range
      * @author Frank Corona Prendes <frank.corona@primavera.care>
      */
     const onChangeDate = (range: Date[]) => {
@@ -118,27 +122,25 @@ export default function App(client: ClientConfiguration): ReactElement {
     }, [query])
 
     return (
-        <Container className={classes.container}>
+        <div className={classes.container}>
             <DateRange onChangeDate={onChangeDate} />
             <Backdrop className={classes.backdrop} open={isFetching}>
                 <CircularProgress color="inherit" />
             </Backdrop>
             {!isFetching &&
-                <section>
-                    <Box className={classes.box}>
-                        <Summary summary={financialSummary} />
-                        <HCCs hccCodes={hccCodes} />
-                        <SectionFinancial data={{ financialSummary, hospitalPivot }} />
-                        <MemberTrendTracker trend={memberTrend} toggleSource={toggleSource} />
-                        <Specialists specialists={claimsSpecialists} query={query} clientId={clientId} />
-                        <InpatientOutpatient inpatient={claimsInpatient} query={query} clientId={clientId} />
-                        <Medications rxs={memberMedications} query={query} clientId={clientId} />
-                        <SpecialtyBreakdown summary={financialSummaryDetail} />
-                        <MRA mras={mra} financials={financialSummary} />
-                        <Copyright />
-                    </Box>
+                <section className={classes.section}>
+                    <Summary summary={financialSummary} />
+                    <HCCs hccCodes={hccCodes} />
+                    <SectionFinancial data={{ financialSummary, hospitalPivot }} />
+                    <MemberTrendTracker trend={memberTrend} toggleSource={toggleSource} query={query} />
+                    <Specialists specialists={claimsSpecialists} query={query} clientId={clientId} />
+                    <InpatientOutpatient inpatient={claimsInpatient} query={query} clientId={clientId} />
+                    <Medications rxs={memberMedications} query={query} clientId={clientId} />
+                    <SpecialtyBreakdown summary={financialSummaryDetail} />
+                    <MRA mras={mra} financials={financialSummary} />
+                    <Copyright />
                 </section>
             }
-        </Container>
+        </div>
     );
 }
