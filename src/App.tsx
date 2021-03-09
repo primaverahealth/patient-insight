@@ -55,7 +55,7 @@ export default function App(client: ClientConfiguration): ReactElement {
     const [clientId] = React.useState(client.clientId);
     const [query, setQuery] = React.useState({
         patientId: client.patientId,
-        from: format(dateFns.startOfDay(dateFns.subMonths(new Date(), 5)), 'yyyy-MM-dd'),
+        from: format(dateFns.startOfMonth(dateFns.subMonths(new Date(), 5)), 'yyyy-MM-dd'),
         to: format(dateFns.endOfDay(new Date()), 'yyyy-MM-dd'),
         source: 'mmr'
     });
