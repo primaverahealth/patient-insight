@@ -78,9 +78,6 @@ export default function MemberTrendTracker(props: { trend: TrendProps[], toggleS
         setColumns(keys(source));
         // @ts-ignore
         setDataSource(source)
-
-        // make the API call
-        // ...
     }, [props.trend, props.query])
 
     return (
