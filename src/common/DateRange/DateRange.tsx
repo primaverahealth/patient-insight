@@ -21,16 +21,14 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export default function DateRange(): ReactElement {
+export default function DateRange(props: { onChangeDate: Function }): ReactElement {
     const classes = useStyles();
-    const [date, setDate] = React.useState<ValueType>([
+    const [date] = React.useState<ValueType>([
         dateFns.startOfDay(dateFns.subMonths(new Date(), 6)),
         dateFns.endOfDay(new Date())
     ]);
 
-    const onChange = (dates: any) => {
-        setDate(dates);
-    }
+    const onChange = (dates: any) => props.onChangeDate(dates);
 
     return (
         <div className={classes.container}>

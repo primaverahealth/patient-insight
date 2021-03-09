@@ -1,5 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Backdrop, Box, CircularProgress, Container, makeStyles, Theme } from '@material-ui/core';
+import * as dateFns from 'date-fns';
+import format from 'date-fns/format';
 
 import Copyright from './components/Copyright/Copyright';
 import Summary from './components/Summary/Summary';
@@ -47,10 +49,10 @@ export default function App(client: ClientConfiguration): ReactElement {
     const { isFetching, fetchData, fetchTrend } = useAppState();
     // react hooks
     const [clientId] = React.useState(client.clientId);
-    const [query] = React.useState({
+    const [query, setQuery] = React.useState({
         patientId: client.patientId,
-        from: "2020-10-01",
-        to: "2021-03-02",
+        from: format(dateFns.startOfDay(dateFns.subMonths(new Date(), 6)), 'yyyy-MM-dd'),
+        to: format(dateFns.endOfDay(new Date()), 'yyyy-MM-dd'),
         source: 'mmr'
     });
     const [financialSummary, setFinancialSummary] = React.useState({});
@@ -98,20 +100,32 @@ export default function App(client: ClientConfiguration): ReactElement {
             .then((response) => setMemberTrend(response.data))
     }
 
+    /**
+     * @description Handle date changes
+     * @param {Date[]}range
+     * @author Frank Corona Prendes <frank.corona@primavera.care>
+     */
+    const onChangeDate = (range: Date[]) => {
+        const from = format(range[0], 'yyyy-MM-dd');
+        const to = format(range[1], 'yyyy-MM-dd');
+        // update query for components
+        setQuery({ ...query, from, to });
+    }
+
     // using the hook for fech data on mount component
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         fetchAllata();
     }, [query])
 
     return (
         <Container className={classes.container}>
+            <DateRange onChangeDate={onChangeDate} />
             <Backdrop className={classes.backdrop} open={isFetching}>
                 <CircularProgress color="inherit" />
             </Backdrop>
             {!isFetching &&
-                <>
+                <section>
                     <Box className={classes.box}>
-                        <DateRange />
                         <Summary summary={financialSummary} />
                         <HCCs hccCodes={hccCodes} />
                         <SectionFinancial data={{ financialSummary, hospitalPivot }} />
@@ -123,7 +137,7 @@ export default function App(client: ClientConfiguration): ReactElement {
                         <MRA mras={mra} financials={financialSummary} />
                         <Copyright />
                     </Box>
-                </>
+                </section>
             }
         </Container>
     );

@@ -9,13 +9,6 @@ export const Ranges: any = [
         ]
     },
     {
-        label: 'Month to Date',
-        value: [
-            dateFns.startOfDay(dateFns.startOfMonth(new Date())),
-            dateFns.endOfDay(new Date())
-        ]
-    },
-    {
         label: 'Last 12 Months',
         value: [
             dateFns.startOfDay(dateFns.subMonths(new Date(), 12)),
