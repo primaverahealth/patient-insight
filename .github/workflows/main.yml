@@ -1,5 +1,5 @@
 on: push
-name: Build React Embedding
+name: Primaverahealth Insight
 jobs:
     build:
         runs-on: ubuntu-latest
