@@ -49,4 +49,4 @@ patientId  | 003acd9c-7783-11eb-9439-0242ac13453 | External EMR ID/Primavera Pat
 
 ## License
 MIT
-**Free Software, Hell Yeah!**
+**Free Software!**
