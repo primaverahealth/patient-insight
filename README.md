@@ -36,15 +36,15 @@ Want to contribute? Great!
     <script src="https://primaverahealth-insight.herokuapp.com/bundle.js" type="text/javascript"></script>
     <script type="text/javascript">
         PatientInsight.init({
-                clientId: 'uuid',
-                patientId: 'uuid'
+                clientId: string,
+                patientId: string
             }
         );
     </script>
 
 Name | Possible value | Description
 ------- | ---------------- | ----------:
-clientId  | f951b1bc-7782-11eb-9439-0242ac131114 | Authorization token
+clientId  | 5ab930c364bfb1001b01b333 | Authorization token
 patientId  | 003acd9c-7783-11eb-9439-0242ac13453 | External EMR ID/Primavera Patient ID
 
 ## License
